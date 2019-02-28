@@ -16,34 +16,34 @@ import java.util.List;
 
 public class ProportionsBar extends View {
     //draw round edges of view
-    private boolean SHOW_ROUND_EDGES = true;
+    private boolean SHOW_ROUND_EDGES;
     //show GAPS
-    private boolean SHOW_GAPS = true;
+    private boolean SHOW_GAPS;
     //GAPs' color
-    private String GAP_COLOR = "#ffffff";
+    private String GAP_COLOR;
     //minimal section value to be shown in % (meaning: values between >0% and <2% will be shown as 2% section)
-    private static final int MINIMAL_SEGMENT_VALUE = 2;
+    private int MINIMAL_SEGMENT_VALUE;
 
     //COLORs for segments
-    private String COLOR1 = "#81DAF5";
-    private String COLOR2 = "#008db9";
-    private String COLOR3 = "#1c0a63";
+//    private String COLOR1 = "#81DAF5";
+//    private String COLOR2 = "#008db9";
+//    private String COLOR3 = "#1c0a63";
 
     //fill the list with colors in the order you want them to see
-    private final List<String> colorList = Arrays.asList(COLOR1, COLOR2, COLOR3);
+//    private final List<String> colorList = Arrays.asList(COLOR1, COLOR2, COLOR3);
 
     private Paint paint;
     public List<Integer> percentValueList;
     private ArrayDeque<String> colorQueue;
 
-    public ProportionsBar(@NonNull Context context, int... values) {
+    /*public ProportionsBar(@NonNull Context context, int... values) {
         super(context);
         initValues(values);
-    }
+    }*/
 
     public ProportionsBar (@NonNull Context context, ProportionsBarBuilder barBuilder) {
         super(context);
-        initValues();
+        initValues(barBuilder);
     }
 
     public ProportionsBar(Context context) {
@@ -77,7 +77,7 @@ public class ProportionsBar extends View {
         invalidate();
     }
 
-    private void initValues(int... v) {
+   /* private void initValues(int... v) {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         percentValueList = new ArrayList<>();
         colorQueue = new ArrayDeque<>();
@@ -91,6 +91,27 @@ public class ProportionsBar extends View {
         int[] k = getPercentValues(v);
         //final list for segment drawing
         for (int i = 0; i < (getPercentValues(v)).length; i++) percentValueList.add(k[i]);
+    }*/
+
+    private void initValues(ProportionsBarBuilder barBuilder) {
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        percentValueList = new ArrayList<>();
+        colorQueue = new ArrayDeque<>();
+
+        this.SHOW_ROUND_EDGES = barBuilder.getSHOW_ROUND_EDGES();
+        this.SHOW_GAPS = barBuilder.getSHOW_GAPS();
+        this.GAP_COLOR = barBuilder.getGAP_COLOR();
+        this.MINIMAL_SEGMENT_VALUE = barBuilder.getMINIMAL_SEGMENT_VALUE();
+
+        //fill colorQueue with predefined colors
+        for (int g = (barBuilder.getColorList()).size() - 1; g >= 0; g--) {
+            colorQueue.push((barBuilder.getColorList()).get(g));
+        }
+
+        //process the list to get proportions (each argument / sum)
+        int[] k = getPercentValues(barBuilder.getValues());
+        //final list for segment drawing
+        for (int i = 0; i < (getPercentValues(barBuilder.getValues())).length; i++) percentValueList.add(k[i]);
     }
 
     @Override
@@ -204,7 +225,7 @@ public class ProportionsBar extends View {
         this.GAP_COLOR = GAP_COLOR;
     }
 
-    public void setCOLOR1(String COLOR1) {
+   /* public void setCOLOR1(String COLOR1) {
         this.COLOR1 = COLOR1;
     }
 
@@ -214,6 +235,6 @@ public class ProportionsBar extends View {
 
     public void setCOLOR3(String COLOR3) {
         this.COLOR3 = COLOR3;
-    }
+    }*/
 
 }

@@ -3,7 +3,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,13 +38,20 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!--<LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="vertical">-->
+        android:orientation="horizontal">
 
+        <LinearLayout
+            android:id="@+id/proportionsBar3"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
-    <!-- </LinearLayout>-->
+        </LinearLayout>
+    </LinearLayout>
 
 
 </LinearLayout>
