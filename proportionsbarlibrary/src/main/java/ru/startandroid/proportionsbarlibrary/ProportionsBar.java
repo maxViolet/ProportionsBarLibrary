@@ -12,8 +12,11 @@ import android.view.View;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class ProportionsBar extends View {
     //draw round edges of view
@@ -22,20 +25,16 @@ public class ProportionsBar extends View {
     private boolean SHOW_GAPS;
     //GAPs' color
     private String GAP_COLOR;
-    //minimal section value to be shown in % (meaning: values between >0% and <2% will be shown as 2% section)
+    //minimal segment value to be shown in % of the bar width (meaning: values between >0% and <2% will be shown as 2% section)
     private int MINIMAL_SEGMENT_VALUE;
-
-    //
-    private double GAP_SIZE = 1.1;
-
+    //GAPs' size in % of the container view's width
+    private double GAP_SIZE = 1.0;
+    //CURVE of the round edges of the custom view
+    private double CURVE = 1.4;
     private Paint paint;
+
     public List<Integer> percentValueList;
     private ArrayDeque<String> colorQueue;
-
-    /*public ProportionsBar(@NonNull Context context, int... values) {
-        super(context);
-        initValues(values);
-    }*/
 
     public ProportionsBar(@NonNull Context context, ProportionsBarBuilder barBuilder) {
         super(context);
@@ -54,22 +53,23 @@ public class ProportionsBar extends View {
         super(context, attrs, defStyleAttr);
     }
 
-    // setters to animate custom view via external ObjectAnimator
+    // setters are needed to animate custom view via external ObjectAnimator
+
     public void setFirstSegment(int i) {
         this.percentValueList.set(0, i);
-        //redraw custom view on every argument change via external ObjectAnimator
+        //redraw custom view on every argument change
         invalidate();
     }
 
     public void setSecondSegment(int j) {
         this.percentValueList.set(1, j);
-        //redraw custom view on every argument change via external ObjectAnimator
+        //redraw custom view on every argument change
         invalidate();
     }
 
     public void setThirdSegment(int k) {
         this.percentValueList.set(2, k);
-        //redraw custom view on every argument change via external ObjectAnimator
+        //redraw custom view on every argument change
         invalidate();
     }
 
@@ -83,10 +83,8 @@ public class ProportionsBar extends View {
         this.GAP_COLOR = barBuilder.getGAP_COLOR();
         this.MINIMAL_SEGMENT_VALUE = barBuilder.getMINIMAL_SEGMENT_VALUE();
 
-        //fill colorQueue with predefined colors
-        for (int g = (barBuilder.getColorList()).size() - 1; g >= 0; g--) {
-            colorQueue.push((barBuilder.getColorList()).get(g));
-        }
+        //fill colorQueue with predefined colors from colorList
+        colorQueue.addAll(barBuilder.getColorList());
 
         //process the list to get proportions (each argument / sum)
         int[] k = getPercentValues(barBuilder.getValues());
@@ -99,16 +97,16 @@ public class ProportionsBar extends View {
     protected void onDraw(Canvas canvas) {
         //X coordinate of the last element
         float tempX = 0;
+        //height of container view
         float h = getHeight();
+        //width of container view
         float w = getWidth();
         //size of gaps (depends from container view width and denominator)
         float gapSize = (float) (getWidth() * GAP_SIZE / 100);
         //X coordinate of rounded edges, stands for radius of ark (depends from container view width and denominator)
         float circleCenterX = (getWidth() / 100);
-        //curve of the round edges of the custom view
-        float curve = (float) 1.4;
         //arc radius
-        float r = circleCenterX * curve;
+        float r = (float) (circleCenterX * CURVE);
 
         //draw SEGMENTS based in the percent values proportions
         for (int k = 0; k < percentValueList.size(); k++) {
@@ -122,7 +120,6 @@ public class ProportionsBar extends View {
                 }
                 //draw rectangle
                 drawRectangle(canvas, tempX, tempX + (w * percentValueList.get(k) / 100));
-                Log.d("drawProportions", k + ", " + percentValueList.get(k));
                 tempX = tempX + (w * percentValueList.get(k) / 100);
 
             } else if (k == percentValueList.size() - 1) {
@@ -135,7 +132,6 @@ public class ProportionsBar extends View {
                 //draw rectangle
                 paint.setColor(Color.parseColor(getColor(colorQueue)));
                 drawRectangle(canvas, tempX, w - r);
-                Log.d("drawProportions", k + ", " + percentValueList.get(k));
                 tempX = w - r;
                 //draw arc
                 if (SHOW_ROUND_EDGES) {
@@ -153,7 +149,6 @@ public class ProportionsBar extends View {
                 //draw rectangle
                 paint.setColor(Color.parseColor(getColor(colorQueue)));
                 drawRectangle(canvas, tempX, tempX + (w * percentValueList.get(k) / 100) + gapSize);
-                Log.d("drawProportions", k + ", " + percentValueList.get(k));
                 tempX += (w * percentValueList.get(k) / 100) + gapSize;
             }
         }
@@ -178,7 +173,6 @@ public class ProportionsBar extends View {
         for (int iterator : val) {
             sum += iterator;
         }
-
         int[] percentValues = new int[val.length];
         //divide each element by sum to get % values
         for (int v = 0; v < val.length; v++) {
@@ -192,10 +186,10 @@ public class ProportionsBar extends View {
         return percentValues;
     }
 
-    private String getColor(ArrayDeque<String> arr) {
+    private String getColor(Queue<String> colors) {
         //return color and push it's value to array's tail
-        String temp = arr.pop();
-        arr.offer(temp);
+        String temp = colors.poll();
+        colors.offer(temp);
         return temp;
     }
 
@@ -213,5 +207,9 @@ public class ProportionsBar extends View {
 
     public void setGAP_SIZE(double GAP_SIZE) {
         this.GAP_SIZE = GAP_SIZE;
+    }
+
+    public void setCURVE(double CURVE) {
+        this.CURVE = CURVE;
     }
 }
