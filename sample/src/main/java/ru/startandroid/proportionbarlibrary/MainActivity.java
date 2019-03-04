@@ -4,6 +4,8 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.util.Arrays;
@@ -15,7 +17,7 @@ import ru.startandroid.proportionsbarlibrary.ProportionsBarBuilder;
 public class MainActivity extends AppCompatActivity {
     private ProportionsBarBuilder builder1;
     private ProportionsBar proportionsBar1;
-    private List<String> colorList1 = Arrays.asList(/*"#81DAF5",*/ "#008db9", "#1c0a63");
+    private List<String> colorList1 = Arrays.asList("#81DAF5", "#008db9", "#1c0a63");
 
     private ProportionsBarBuilder builder2;
     private ProportionsBar proportionsBar2;
@@ -39,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button butt = findViewById(R.id.butt);
+        butt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setup2ndExample();
+            }
+        });
+
         setup1stExample();
         setup2ndExample();
         setup3rdExample();
@@ -48,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private void setup1stExample() {
         builder1 = new ProportionsBarBuilder(colorList1, true, true, 33, 22, 11);
         proportionsBar1 = new ProportionsBar(this, builder1);
-        proportionsBar1.setGAP_SIZE(1.2);
-        proportionsBar1.setCURVE(6.0);
+        proportionsBar1.setGapSize(1.2);
+        proportionsBar1.setCurve(6.0);
 
         container1 = findViewById(R.id.proportionsBar1);
         container1.addView(proportionsBar1);
@@ -66,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     private void setup3rdExample() {
         builder3 = new ProportionsBarBuilder(colorList3, true, false, 11, 22, 33, 44, 55);
         proportionsBar3 = new ProportionsBar(this, builder3);
-        proportionsBar3.setGAP_SIZE(0.5);
+        proportionsBar3.setGapSize(0.5);
 
         container3 = findViewById(R.id.proportionsBar3);
         container3.addView(proportionsBar3);
@@ -77,9 +87,14 @@ public class MainActivity extends AppCompatActivity {
 
         builder4 = new ProportionsBarBuilder(colorList4, true, true, 3, 2, 1);
         proportionsBar4 = new ProportionsBar(this, builder4);
-        proportionsBar4.setGAP_SIZE(0.5);
-        proportionsBar4.setGAP_COLOR("#212121");
+        proportionsBar4.setGapSize(0.5);
+        proportionsBar4.setGapColor("#212121");
 
+/*
+        new ProportionsBar()
+                .withGap()
+                .suhehfsdfgsy()
+                .df*/
         //setup animations for proportionsBar4
         AnimatorSet animSet = new AnimatorSet();
         ObjectAnimator animIntList1 = ObjectAnimator

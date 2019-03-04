@@ -8,4 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="proportionsBar_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/padding_8dp</item>
+    </style>
 </resources>
