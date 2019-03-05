@@ -1,5 +1,7 @@
 package ru.startandroid.proportionsbarlibrary;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -18,7 +20,6 @@ import java.util.List;
 import java.util.Queue;
 
 public class ProportionsBar extends View {
-    Context context;
     //draw round edges
     private boolean showRoundEdges;
     //curveOfEdges of the round edges of the custom view
@@ -31,6 +32,9 @@ public class ProportionsBar extends View {
     private int gapColor = getResources().getColor(R.color.white);
     //minimal segment value to be shown in % of the bar width (meaning: values between >0% and <2% will be shown as 2% section)
     private int minimalSegmentValue = 2;
+
+    private boolean animated = false;
+    private int animationTime = 1500;
 
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private int[] valueList = new int[0];
@@ -69,6 +73,10 @@ public class ProportionsBar extends View {
         this.minimalSegmentValue = minimalSegmentValue;
         return this;
     }
+    public ProportionsBar animated(boolean animated) {
+        this.animated = animated;
+        return this;
+    }
 
     public ProportionsBar addValues(int... values) {
         this.valueList = values;
@@ -92,7 +100,6 @@ public class ProportionsBar extends View {
 
     public ProportionsBar(Context context) {
         super(context);
-        this.context = context;
     }
 
     public ProportionsBar(Context context, AttributeSet attrs) {
@@ -101,6 +108,12 @@ public class ProportionsBar extends View {
 
     public ProportionsBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (animated) playAnimation();
     }
 
     @Override
@@ -203,6 +216,19 @@ public class ProportionsBar extends View {
         Integer temp = colorQueueInt.poll();
         colorQueueInt.offer(temp);
         return temp;
+    }
+
+    public void playAnimation() {
+        //setup animations for proportionsBar4
+        AnimatorSet animSet = new AnimatorSet();
+        ObjectAnimator animIntList1 = ObjectAnimator
+                .ofInt(this, "FirstSegment", 2, this.percentValueList.get(0));
+        animIntList1.setDuration(animationTime);
+        ObjectAnimator animIntList2 = ObjectAnimator
+                .ofInt(this, "SecondSegment", 2, this.percentValueList.get(1));
+        animIntList2.setDuration(animationTime);
+        animSet.playTogether(animIntList1, animIntList2);
+        animSet.start();
     }
 
     // setters are needed to animate custom view via external ObjectAnimator

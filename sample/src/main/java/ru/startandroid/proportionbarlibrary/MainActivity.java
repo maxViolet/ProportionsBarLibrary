@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 .gapSize(1.2)
                 .showRoundEdges(true)
                 .curveOfEdges(7.5)
+                .animated(true)
                 .addIntColor(getResources().getColor(R.color.example1_1))
                 .addIntColor(getResources().getColor(R.color.example1_2))
                 .addIntColor(getResources().getColor(R.color.example1_3))
