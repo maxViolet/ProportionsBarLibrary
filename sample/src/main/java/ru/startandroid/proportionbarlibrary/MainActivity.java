@@ -75,28 +75,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setup4thExample() {
-        int ANIMATION_TIME = 4000;
-
         proportionsBar4 = new ProportionsBar(this);
         proportionsBar4.showGaps(true)
                 .gapSize(0.7)
+                .animated(true)
+                .animationDuration(4000)
                 .gapColor(Color.BLACK)
                 .showRoundEdges(true)
                 .addIntColors(getResources().getColor(R.color.example4_1),
                         getResources().getColor(R.color.example4_2),
                         getResources().getColor(R.color.example4_3))
                 .addValues(4276, 3238, 2820);
-
-        //setup animations for proportionsBar4
-        AnimatorSet animSet = new AnimatorSet();
-        ObjectAnimator animIntList1 = ObjectAnimator
-                .ofInt(proportionsBar4, "FirstSegment", 2, proportionsBar4.percentValueList.get(0));
-        animIntList1.setDuration(ANIMATION_TIME);
-        ObjectAnimator animIntList2 = ObjectAnimator
-                .ofInt(proportionsBar4, "SecondSegment", 2, proportionsBar4.percentValueList.get(1));
-        animIntList2.setDuration(ANIMATION_TIME);
-        animSet.playTogether(animIntList1, animIntList2);
-        animSet.start();
 
         LinearLayout container4 = findViewById(R.id.proportionsBar4);
         container4.addView(proportionsBar4);

@@ -77,6 +77,10 @@ public class ProportionsBar extends View {
         this.animated = animated;
         return this;
     }
+    public ProportionsBar animationDuration(int duration) {
+        this.animationTime = duration;
+        return this;
+    }
 
     public ProportionsBar addValues(int... values) {
         this.valueList = values;
