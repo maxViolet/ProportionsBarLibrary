@@ -1,46 +1,98 @@
 package ru.startandroid.proportionsbarlibrary;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.annotation.IntegerRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ComplexColorCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 
 public class ProportionsBar extends View {
+    Context context;
     //draw round edges
     private boolean showRoundEdges;
+    //curveOfEdges of the round edges of the custom view
+    private double curveOfEdges = 1.4;
     //show GAPS
-    private boolean showGaps;
-    //GAPs' color
-    private String gapColor;
-    //minimal segment value to be shown in % of the bar width (meaning: values between >0% and <2% will be shown as 2% section)
-    private int minimalSegmentValue;
+    private boolean showGaps = true;
     //GAPs' size in % of the container view's width
     private double gapSize = 1.0;
-    //curve of the round edges of the custom view
-    private double curve = 1.4;
+    //GAPs' color
+    private String gapColor = "#ffffff";
+    //minimal segment value to be shown in % of the bar width (meaning: values between >0% and <2% will be shown as 2% section)
+    private int minimalSegmentValue = 2;
 
-    private Paint paint;
+    private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private int[] valueList = new int[0];
     public List<Integer> percentValueList = new ArrayList<>();
-    private List<String> colors = new ArrayList<>();
-    private Queue<String> colorQueue = new ArrayDeque<>();
+    //    private List<String> colorsString = new ArrayList<>();
+    private List<Integer> colorsInt = new ArrayList<>();
+    //    private Queue<String> colorQueue = new ArrayDeque<>();
+    private Queue<Integer> colorQueueInt = new ArrayDeque<>();
 
-    public ProportionsBar(@NonNull Context context, ProportionsBarBuilder barBuilder) {
-        super(context);
-        initValues(barBuilder);
+    public ProportionsBar showRoundEdges(boolean show) {
+        this.showRoundEdges = show;
+        return this;
+    }
+
+    public ProportionsBar curveOfEdges(double curve) {
+        this.curveOfEdges = curve;
+        return this;
+    }
+
+    public ProportionsBar showGaps(boolean show) {
+        this.showGaps = show;
+        return this;
+    }
+
+    public ProportionsBar gapSize(double size) {
+        this.gapSize = size;
+        return this;
+    }
+
+    public ProportionsBar gapColor(String gapColor) {
+        this.gapColor = gapColor;
+        return this;
+    }
+
+    public ProportionsBar minimalSegmentValue(int minimalSegmentValue) {
+        this.minimalSegmentValue = minimalSegmentValue;
+        return this;
+    }
+
+    public ProportionsBar addValues(int... values) {
+        this.valueList = values;
+        int[] k = getPercentValues(valueList);
+        //fill percent list for segment drawing
+        for (int i = 0; i < valueList.length; i++) {
+            percentValueList.add(k[i]);
+        }
+        return this;
+    }
+
+    public ProportionsBar addIntColor(Integer color) {
+        this.colorsInt.add(color);
+        return this;
+    }
+
+    public ProportionsBar addIntColors(Integer... colors) {
+        this.colorsInt.addAll(Arrays.asList(colors));
+        return this;
     }
 
     public ProportionsBar(Context context) {
         super(context);
+        this.context = context;
     }
 
     public ProportionsBar(Context context, AttributeSet attrs) {
@@ -51,28 +103,10 @@ public class ProportionsBar extends View {
         super(context, attrs, defStyleAttr);
     }
 
-    private void initValues(ProportionsBarBuilder barBuilder) {
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-        this.showRoundEdges = barBuilder.getSHOW_ROUND_EDGES();
-        this.showGaps = barBuilder.getSHOW_GAPS();
-        this.gapColor = barBuilder.getGAP_COLOR();
-        this.minimalSegmentValue = barBuilder.getMINIMAL_SEGMENT_VALUE();
-
-        //fill colorQueue with predefined colors from colorList
-        colors.addAll(barBuilder.getColorList());
-
-        //process the list to get proportions (each argument / sum)
-        int[] k = getPercentValues(barBuilder.getValues());
-        //final list for segment drawing
-        for (int i = 0; i < (getPercentValues(barBuilder.getValues())).length; i++)
-            percentValueList.add(k[i]);
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
-        colorQueue.clear();
-        colorQueue.addAll(colors);
+        colorQueueInt.clear();
+        colorQueueInt.addAll(colorsInt);
         //X coordinate of the last element
         float tempX = 0;
         //height of container view
@@ -84,13 +118,13 @@ public class ProportionsBar extends View {
         //X coordinate of rounded edges, stands for radius of ark (depends from container view width and denominator)
         float circleCenterX = (getWidth() / 100);
         //arc radius
-        float r = (float) (circleCenterX * curve);
+        float r = (float) (circleCenterX * curveOfEdges);
 
         //draw SEGMENTS based in the percent values proportions
         for (int k = 0; k < percentValueList.size(); k++) {
             if (k == 0) {
                 //FIRST segment
-                paint.setColor(Color.parseColor(getColor(colorQueue)));
+                paint.setColor(getColorFromQueue());
                 //draw arc
                 if (showRoundEdges) {
                     drawArc(canvas, 0, 2 * r, h, 90);
@@ -108,7 +142,7 @@ public class ProportionsBar extends View {
                     tempX += gapSize;
                 }
                 //draw rectangle
-                paint.setColor(Color.parseColor(getColor(colorQueue)));
+                paint.setColor(getColorFromQueue());
                 drawRectangle(canvas, tempX, w - r);
                 tempX = w - r;
                 //draw arc
@@ -125,7 +159,7 @@ public class ProportionsBar extends View {
                     tempX += gapSize;
                 }
                 //draw rectangle
-                paint.setColor(Color.parseColor(getColor(colorQueue)));
+                paint.setColor(getColorFromQueue());
                 drawRectangle(canvas, tempX, tempX + (w * percentValueList.get(k) / 100) + gapSize);
                 tempX += (w * percentValueList.get(k) / 100) + gapSize;
             }
@@ -164,31 +198,11 @@ public class ProportionsBar extends View {
         return percentValues;
     }
 
-    private String getColor(Queue<String> colors) {
-        //return color and push it's value to array's tail
-        String temp = colors.poll();
-        colors.offer(temp);
+    //return Int value from queue of colors
+    private Integer getColorFromQueue() {
+        Integer temp = colorQueueInt.poll();
+        colorQueueInt.offer(temp);
         return temp;
-    }
-
-    public void setShowRoundEdges(boolean showRoundEdges) {
-        this.showRoundEdges = showRoundEdges;
-    }
-
-    public void setShowGaps(boolean showGaps) {
-        this.showGaps = showGaps;
-    }
-
-    public void setGapColor(String gapColor) {
-        this.gapColor = gapColor;
-    }
-
-    public void setGapSize(double gapSize) {
-        this.gapSize = gapSize;
-    }
-
-    public void setCurve(double curve) {
-        this.curve = curve;
     }
 
     // setters are needed to animate custom view via external ObjectAnimator

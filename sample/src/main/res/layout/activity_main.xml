@@ -42,7 +42,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/padding_8dp"
+        android:paddingEnd="@dimen/padding_8dp">
 
         <LinearLayout
             android:id="@+id/proportionsBar3"
@@ -69,23 +71,5 @@
 
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:padding="@dimen/padding_8dp">
-
-        <ru.startandroid.proportionsbarlibrary.ProportionsBar
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/butt"/>
-
 
 </LinearLayout>

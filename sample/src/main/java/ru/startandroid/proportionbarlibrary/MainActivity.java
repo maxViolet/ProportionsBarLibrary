@@ -4,32 +4,18 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.util.Arrays;
 import java.util.List;
 
 import ru.startandroid.proportionsbarlibrary.ProportionsBar;
-import ru.startandroid.proportionsbarlibrary.ProportionsBarBuilder;
 
 public class MainActivity extends AppCompatActivity {
-    private ProportionsBarBuilder builder1;
     private ProportionsBar proportionsBar1;
-    private List<String> colorList1 = Arrays.asList("#81DAF5", "#008db9", "#1c0a63");
-
-    private ProportionsBarBuilder builder2;
     private ProportionsBar proportionsBar2;
-    private List<String> colorList2 = Arrays.asList("#fdd835", "#f57c00", "#bf360c");
-
-    private ProportionsBarBuilder builder3;
     private ProportionsBar proportionsBar3;
-    private List<String> colorList3 = Arrays.asList("#fdd835", "#f57c00", "#e53935", "#6d4c41", "#212121");
-
-    private ProportionsBarBuilder builder4;
     private ProportionsBar proportionsBar4;
-    private List<String> colorList4 = Arrays.asList("#ffcdd2", "#f48fb1", "#ba68c8");
 
     private LinearLayout container1;
     private LinearLayout container2;
@@ -41,14 +27,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button butt = findViewById(R.id.butt);
-        butt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setup2ndExample();
-            }
-        });
-
         setup1stExample();
         setup2ndExample();
         setup3rdExample();
@@ -56,27 +34,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setup1stExample() {
-        builder1 = new ProportionsBarBuilder(colorList1, true, true, 33, 22, 11);
-        proportionsBar1 = new ProportionsBar(this, builder1);
-        proportionsBar1.setGapSize(1.2);
-        proportionsBar1.setCurve(6.0);
+        proportionsBar1 = new ProportionsBar(this);
+        proportionsBar1.showGaps(true)
+                .gapSize(1.2)
+                .showRoundEdges(true)
+                .curveOfEdges(5.5)
+                .addIntColor(getResources().getColor(R.color.example1_1))
+                .addIntColor(getResources().getColor(R.color.example1_2))
+                .addIntColor(getResources().getColor(R.color.example1_3))
+                .addValues(33, 22, 28);
 
         container1 = findViewById(R.id.proportionsBar1);
         container1.addView(proportionsBar1);
     }
 
     private void setup2ndExample() {
-        builder2 = new ProportionsBarBuilder(colorList2, false, false, 33, 33, 33);
-        proportionsBar2 = new ProportionsBar(this, builder2);
+        proportionsBar2 = new ProportionsBar(this);
+        proportionsBar2.showRoundEdges(false)
+                .showGaps(false)
+                .addIntColors(getResources().getColor(R.color.example2_1),
+                        getResources().getColor(R.color.example2_2),
+                        getResources().getColor(R.color.example2_3))
+                .addValues(33, 30, 24, 44, 41, 21);
 
         container2 = findViewById(R.id.proportionsBar2);
         container2.addView(proportionsBar2);
     }
 
     private void setup3rdExample() {
-        builder3 = new ProportionsBarBuilder(colorList3, true, false, 11, 22, 33, 44, 55);
-        proportionsBar3 = new ProportionsBar(this, builder3);
-        proportionsBar3.setGapSize(0.5);
+        proportionsBar3 = new ProportionsBar(this);
+        proportionsBar3.showGaps(true)
+                .showRoundEdges(false)
+                .gapSize(0.3)
+                .addIntColors(getResources().getColor(R.color.example3_1),
+                        getResources().getColor(R.color.example3_2),
+                        getResources().getColor(R.color.example3_3),
+                        getResources().getColor(R.color.example3_4),
+                        getResources().getColor(R.color.example3_5))
+                .addValues(33, 2, 11, 40, 20);
 
         container3 = findViewById(R.id.proportionsBar3);
         container3.addView(proportionsBar3);
@@ -85,16 +80,16 @@ public class MainActivity extends AppCompatActivity {
     private void setup4thExample() {
         int ANIMATION_TIME = 4000;
 
-        builder4 = new ProportionsBarBuilder(colorList4, true, true, 3, 2, 1);
-        proportionsBar4 = new ProportionsBar(this, builder4);
-        proportionsBar4.setGapSize(0.5);
-        proportionsBar4.setGapColor("#212121");
+        proportionsBar4 = new ProportionsBar(this);
+        proportionsBar4.showGaps(true)
+                .gapSize(0.7)
+                .gapColor("#212121")
+                .showRoundEdges(true)
+                .addIntColors(getResources().getColor(R.color.example4_1),
+                        getResources().getColor(R.color.example4_2),
+                        getResources().getColor(R.color.example4_3))
+                .addValues(4276, 3238, 2820);
 
-/*
-        new ProportionsBar()
-                .withGap()
-                .suhehfsdfgsy()
-                .df*/
         //setup animations for proportionsBar4
         AnimatorSet animSet = new AnimatorSet();
         ObjectAnimator animIntList1 = ObjectAnimator
