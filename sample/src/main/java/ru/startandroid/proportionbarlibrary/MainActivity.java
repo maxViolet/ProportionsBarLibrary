@@ -2,6 +2,7 @@ package ru.startandroid.proportionbarlibrary;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.LinearLayout;
@@ -16,11 +17,6 @@ public class MainActivity extends AppCompatActivity {
     private ProportionsBar proportionsBar2;
     private ProportionsBar proportionsBar3;
     private ProportionsBar proportionsBar4;
-
-    private LinearLayout container1;
-    private LinearLayout container2;
-    private LinearLayout container3;
-    private LinearLayout container4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +34,13 @@ public class MainActivity extends AppCompatActivity {
         proportionsBar1.showGaps(true)
                 .gapSize(1.2)
                 .showRoundEdges(true)
-                .curveOfEdges(5.5)
+                .curveOfEdges(7.5)
                 .addIntColor(getResources().getColor(R.color.example1_1))
                 .addIntColor(getResources().getColor(R.color.example1_2))
                 .addIntColor(getResources().getColor(R.color.example1_3))
                 .addValues(33, 22, 28);
 
-        container1 = findViewById(R.id.proportionsBar1);
+        LinearLayout container1 = findViewById(R.id.proportionsBar1);
         container1.addView(proportionsBar1);
     }
 
@@ -55,9 +51,9 @@ public class MainActivity extends AppCompatActivity {
                 .addIntColors(getResources().getColor(R.color.example2_1),
                         getResources().getColor(R.color.example2_2),
                         getResources().getColor(R.color.example2_3))
-                .addValues(33, 30, 24, 44, 41, 21);
+                .addValues(11, 30, 24, 12, 41, 27);
 
-        container2 = findViewById(R.id.proportionsBar2);
+        LinearLayout container2 = findViewById(R.id.proportionsBar2);
         container2.addView(proportionsBar2);
     }
 
@@ -73,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                         getResources().getColor(R.color.example3_5))
                 .addValues(33, 2, 11, 40, 20);
 
-        container3 = findViewById(R.id.proportionsBar3);
+        LinearLayout container3 = findViewById(R.id.proportionsBar3);
         container3.addView(proportionsBar3);
     }
 
@@ -83,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         proportionsBar4 = new ProportionsBar(this);
         proportionsBar4.showGaps(true)
                 .gapSize(0.7)
-                .gapColor("#212121")
+                .gapColor(Color.BLACK)
                 .showRoundEdges(true)
                 .addIntColors(getResources().getColor(R.color.example4_1),
                         getResources().getColor(R.color.example4_2),
@@ -101,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         animSet.playTogether(animIntList1, animIntList2);
         animSet.start();
 
-        container4 = findViewById(R.id.proportionsBar4);
+        LinearLayout container4 = findViewById(R.id.proportionsBar4);
         container4.addView(proportionsBar4);
     }
 

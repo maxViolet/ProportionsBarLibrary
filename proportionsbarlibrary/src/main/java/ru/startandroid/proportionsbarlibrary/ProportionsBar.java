@@ -28,7 +28,7 @@ public class ProportionsBar extends View {
     //GAPs' size in % of the container view's width
     private double gapSize = 1.0;
     //GAPs' color
-    private String gapColor = "#ffffff";
+    private int gapColor = getResources().getColor(R.color.white);
     //minimal segment value to be shown in % of the bar width (meaning: values between >0% and <2% will be shown as 2% section)
     private int minimalSegmentValue = 2;
 
@@ -60,7 +60,7 @@ public class ProportionsBar extends View {
         return this;
     }
 
-    public ProportionsBar gapColor(String gapColor) {
+    public ProportionsBar gapColor(int gapColor) {
         this.gapColor = gapColor;
         return this;
     }
@@ -175,7 +175,7 @@ public class ProportionsBar extends View {
     }
 
     private void drawGap(Canvas canvas, float start, float gap) {
-        paint.setColor(Color.parseColor(gapColor));
+        paint.setColor(gapColor);
         canvas.drawRect(start, 0, start + gap, getHeight(), paint);
     }
 
