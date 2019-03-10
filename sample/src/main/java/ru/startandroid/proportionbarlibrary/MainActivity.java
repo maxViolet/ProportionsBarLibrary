@@ -1,14 +1,9 @@
 package ru.startandroid.proportionbarlibrary;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
-
-import java.util.Arrays;
-import java.util.List;
 
 import ru.startandroid.proportionsbarlibrary.ProportionsBar;
 
@@ -31,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setup1stExample() {
         proportionsBar1 = new ProportionsBar(this);
+        proportionsBar1.setId(R.id.CTRL);
         proportionsBar1.showGaps(true)
                 .gapSize(1.2)
                 .showRoundEdges(true)
@@ -89,10 +85,5 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout container4 = findViewById(R.id.proportionsBar4);
         container4.addView(proportionsBar4);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 }

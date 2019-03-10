@@ -3,13 +3,11 @@ package ru.startandroid.proportionsbarlibrary;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ComplexColorCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -33,15 +31,14 @@ public class ProportionsBar extends View {
     //minimal segment value to be shown in % of the bar width (meaning: values between >0% and <2% will be shown as 2% section)
     private int minimalSegmentValue = 2;
 
+    private boolean firstLaunch = true;
     private boolean animated = false;
-    private int animationTime = 1500;
+    private int animationDuration = 1500;
 
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private int[] valueList = new int[0];
     public List<Integer> percentValueList = new ArrayList<>();
-    //    private List<String> colorsString = new ArrayList<>();
     private List<Integer> colorsInt = new ArrayList<>();
-    //    private Queue<String> colorQueue = new ArrayDeque<>();
     private Queue<Integer> colorQueueInt = new ArrayDeque<>();
 
     public ProportionsBar showRoundEdges(boolean show) {
@@ -73,12 +70,14 @@ public class ProportionsBar extends View {
         this.minimalSegmentValue = minimalSegmentValue;
         return this;
     }
+
     public ProportionsBar animated(boolean animated) {
         this.animated = animated;
         return this;
     }
+
     public ProportionsBar animationDuration(int duration) {
-        this.animationTime = duration;
+        this.animationDuration = duration;
         return this;
     }
 
@@ -104,6 +103,7 @@ public class ProportionsBar extends View {
 
     public ProportionsBar(Context context) {
         super(context);
+        this.generateViewId();
     }
 
     public ProportionsBar(Context context, AttributeSet attrs) {
@@ -115,15 +115,10 @@ public class ProportionsBar extends View {
     }
 
     @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        if (animated) playAnimation();
-    }
-
-    @Override
     protected void onDraw(Canvas canvas) {
         colorQueueInt.clear();
         colorQueueInt.addAll(colorsInt);
+
         //X coordinate of the last element
         float tempX = 0;
         //height of container view
@@ -227,10 +222,10 @@ public class ProportionsBar extends View {
         AnimatorSet animSet = new AnimatorSet();
         ObjectAnimator animIntList1 = ObjectAnimator
                 .ofInt(this, "FirstSegment", 2, this.percentValueList.get(0));
-        animIntList1.setDuration(animationTime);
+        animIntList1.setDuration(animationDuration);
         ObjectAnimator animIntList2 = ObjectAnimator
                 .ofInt(this, "SecondSegment", 2, this.percentValueList.get(1));
-        animIntList2.setDuration(animationTime);
+        animIntList2.setDuration(animationDuration);
         animSet.playTogether(animIntList1, animIntList2);
         animSet.start();
     }
@@ -253,4 +248,64 @@ public class ProportionsBar extends View {
         //redraw custom view on every argument change
         invalidate();
     }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (animated && firstLaunch) playAnimation();
+        firstLaunch = false;
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState ss = new SavedState(superState);
+
+        ss.firstLaunch = this.firstLaunch;
+        return ss;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+
+        this.firstLaunch = ss.firstLaunch;
+    }
+
+    static class SavedState extends BaseSavedState {
+        boolean firstLaunch;
+
+        public SavedState(Parcel in) {
+            super(in);
+            this.firstLaunch = in.readInt() == 1;
+        }
+
+        public SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(firstLaunch ? 0 : 1);
+        }
+
+        //required field that makes Parcelables from a Parcel
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+    }
+
 }
