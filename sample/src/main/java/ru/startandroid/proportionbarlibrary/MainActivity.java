@@ -19,14 +19,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setup1stExample();
-        setup2ndExample();
-        setup3rdExample();
+//        setup2ndExample();
+//        setup3rdExample();
         setup4thExample();
     }
 
     private void setup1stExample() {
         proportionsBar1 = new ProportionsBar(this);
-        proportionsBar1.setId(R.id.CTRL);
+        proportionsBar1.setId(R.id.proportionsBar1);
         proportionsBar1.showGaps(true)
                 .gapSize(1.2)
                 .showRoundEdges(true)
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setup2ndExample() {
         proportionsBar2 = new ProportionsBar(this);
+        proportionsBar1.setId(R.id.proportionsBar2);
         proportionsBar2.showRoundEdges(false)
                 .showGaps(false)
                 .addIntColors(getResources().getColor(R.color.example2_1),
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setup3rdExample() {
         proportionsBar3 = new ProportionsBar(this);
+        proportionsBar1.setId(R.id.proportionsBar3);
         proportionsBar3.showGaps(true)
                 .showRoundEdges(false)
                 .gapSize(0.3)
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setup4thExample() {
         proportionsBar4 = new ProportionsBar(this);
+        proportionsBar1.setId(R.id.proportionsBar4);
         proportionsBar4.showGaps(true)
                 .gapSize(0.7)
                 .animated(true)

@@ -103,7 +103,6 @@ public class ProportionsBar extends View {
 
     public ProportionsBar(Context context) {
         super(context);
-        this.generateViewId();
     }
 
     public ProportionsBar(Context context, AttributeSet attrs) {
@@ -239,13 +238,11 @@ public class ProportionsBar extends View {
 
     public void setSecondSegment(int j) {
         this.percentValueList.set(1, j);
-        //redraw custom view on every argument change
         invalidate();
     }
 
     public void setThirdSegment(int k) {
         this.percentValueList.set(2, k);
-        //redraw custom view on every argument change
         invalidate();
     }
 
@@ -296,7 +293,6 @@ public class ProportionsBar extends View {
             out.writeInt(firstLaunch ? 0 : 1);
         }
 
-        //required field that makes Parcelables from a Parcel
         public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
