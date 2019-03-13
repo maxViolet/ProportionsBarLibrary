@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="proportion_bar_1" type="id"/>
-    <!--<item name="proportion_bar_2" type="id"/>
+    <item name="proportion_bar_2" type="id"/>
     <item name="proportion_bar_3" type="id"/>
-    <item name="proportion_bar_4" type="id"/>-->
+    <item name="proportion_bar_4" type="id"/>
 </resources>

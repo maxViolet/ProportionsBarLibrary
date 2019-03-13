@@ -14,7 +14,7 @@
         android:paddingEnd="24dp">
 
         <LinearLayout
-            android:id="@+id/proportionsBar1"
+            android:id="@+id/container_pb1"
             android:layout_width="match_parent"
             android:layout_height="12dp"
             android:layout_gravity="center"
@@ -30,7 +30,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/proportionsBar2"
+            android:id="@+id/container_pb2"
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:layout_gravity="center"
@@ -47,7 +47,7 @@
         android:paddingEnd="@dimen/padding_8dp">
 
         <LinearLayout
-            android:id="@+id/proportionsBar3"
+            android:id="@+id/container_pb3"
             android:layout_width="match_parent"
             android:layout_height="10dp"
             android:layout_gravity="center"
@@ -63,7 +63,7 @@
         android:padding="@dimen/padding_8dp">
 
         <LinearLayout
-            android:id="@+id/proportionsBar4"
+            android:id="@+id/container_pb4"
             android:layout_width="match_parent"
             android:layout_height="@dimen/padding_8dp"
             android:layout_gravity="center"
