@@ -30,13 +30,14 @@ public class ProportionsBar extends View {
     private int gapColor = getResources().getColor(R.color.white);
     //minimal segment value to be shown in % of the bar width (meaning: values between >0% and <2% will be shown as 2% section)
     private int minimalSegmentValue = 2;
+    //list of data values
+    private ArrayList<Integer> valueList = new ArrayList<>();
 
     private boolean firstLaunch = true;
     private boolean animated = false;
     private int animationDuration = 1500;
 
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private int[] valueList = new int[0];
     public List<Integer> percentValueList = new ArrayList<>();
     private List<Integer> colorsInt = new ArrayList<>();
     private Queue<Integer> colorQueueInt = new ArrayDeque<>();
@@ -81,12 +82,17 @@ public class ProportionsBar extends View {
         return this;
     }
 
-    public ProportionsBar addValues(int... values) {
-        this.valueList = values;
-        int[] k = getPercentValues(valueList);
+//    public ProportionsBar addValue(int value) {
+//        this.valueList.add(value);
+//        return this;
+//    }
+
+    public ProportionsBar addValues(Integer... values) {
+        this.valueList.addAll(Arrays.asList(values));
+        ArrayList<Integer> k = getPercentValues(valueList);
         //fill percent list for segment drawing
-        for (int i = 0; i < valueList.length; i++) {
-            percentValueList.add(k[i]);
+        for (int i = 0; i < valueList.size(); i++) {
+            percentValueList.add(k.get(i));
         }
         return this;
     }
@@ -127,7 +133,7 @@ public class ProportionsBar extends View {
         //size of gaps (depends from container view width and denominator)
         float gapSize = (float) (getWidth() * this.gapSize / 100);
         //X coordinate of rounded edges, stands for radius of ark (depends from container view width and denominator)
-        float circleCenterX = (getWidth() / 100);
+        float circleCenterX = (float) getWidth() / 100;
         //arc radius
         float r = (float) (circleCenterX * curveOfEdges);
 
@@ -190,20 +196,21 @@ public class ProportionsBar extends View {
         canvas.drawRect(start, 0, start + gap, getHeight(), paint);
     }
 
-    private int[] getPercentValues(int... val) {
+    private ArrayList<Integer> getPercentValues(ArrayList<Integer> val) {
         int sum = 0;
         //get sum of all arguments
         for (int iterator : val) {
             sum += iterator;
         }
-        int[] percentValues = new int[val.length];
+
+        ArrayList<Integer> percentValues = new ArrayList<>();
         //divide each element by sum to get % values
-        for (int v = 0; v < val.length; v++) {
+        for (int v = 0; v < val.size(); v++) {
             //check for minimalSegmentValue
-            if ((val[v] * 100 / sum) != 0 && (val[v] * 100 / sum) < minimalSegmentValue) {
-                percentValues[v] = minimalSegmentValue;
+            if ((val.get(v) * 100 / sum) != 0 && (val.get(v) * 100 / sum) < minimalSegmentValue) {
+                percentValues.add(minimalSegmentValue);
             } else {
-                percentValues[v] = val[v] * 100 / sum;
+                percentValues.add(val.get(v) * 100 / sum);
             }
         }
         return percentValues;
@@ -229,7 +236,7 @@ public class ProportionsBar extends View {
         animSet.start();
     }
 
-    // setters are needed to animate custom view via external ObjectAnimator
+    //setters are needed to animate custom view via external ObjectAnimator
     public void setFirstSegment(int i) {
         this.percentValueList.set(0, i);
         //redraw custom view on every argument change
@@ -275,6 +282,7 @@ public class ProportionsBar extends View {
         this.firstLaunch = ss.firstLaunch;
     }
 
+    //nested class for saving view's state
     static class SavedState extends BaseSavedState {
         boolean firstLaunch;
 
