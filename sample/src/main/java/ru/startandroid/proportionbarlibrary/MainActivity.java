@@ -8,10 +8,6 @@ import android.widget.LinearLayout;
 import ru.startandroid.proportionsbarlibrary.ProportionsBar;
 
 public class MainActivity extends AppCompatActivity {
-    private ProportionsBar proportionsBar1;
-    private ProportionsBar proportionsBar2;
-    private ProportionsBar proportionsBar3;
-    private ProportionsBar proportionsBar4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setup1stExample() {
-        proportionsBar1 = new ProportionsBar(this);
+        ProportionsBar proportionsBar1 = new ProportionsBar(this);
         proportionsBar1.setId(R.id.proportion_bar_1);
         proportionsBar1.showGaps(true)
                 .gapSize(1.2)
@@ -35,14 +31,16 @@ public class MainActivity extends AppCompatActivity {
                 .addIntColor(getResources().getColor(R.color.example1_1))
                 .addIntColor(getResources().getColor(R.color.example1_2))
                 .addIntColor(getResources().getColor(R.color.example1_3))
-                .addValues(33, 22, 28);
+                .addValue(33)
+                .addValue(22)
+                .addValue(28);
 
         LinearLayout container1 = findViewById(R.id.container_pb1);
         container1.addView(proportionsBar1);
     }
 
     private void setup2ndExample() {
-        proportionsBar2 = new ProportionsBar(this);
+        ProportionsBar proportionsBar2 = new ProportionsBar(this);
         proportionsBar2.setId(R.id.proportion_bar_2);
         proportionsBar2.showRoundEdges(false)
                 .showGaps(false)
@@ -56,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setup3rdExample() {
-        proportionsBar3 = new ProportionsBar(this);
+        ProportionsBar proportionsBar3 = new ProportionsBar(this);
         proportionsBar3.setId(R.id.proportion_bar_3);
         proportionsBar3.showGaps(true)
                 .showRoundEdges(false)
@@ -73,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setup4thExample() {
-        proportionsBar4 = new ProportionsBar(this);
+        ProportionsBar proportionsBar4 = new ProportionsBar(this);
         proportionsBar4.setId(R.id.proportion_bar_4);
         proportionsBar4.showGaps(true)
                 .gapSize(0.7)

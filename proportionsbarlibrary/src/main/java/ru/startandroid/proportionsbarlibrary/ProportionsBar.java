@@ -82,18 +82,18 @@ public class ProportionsBar extends View {
         return this;
     }
 
-//    public ProportionsBar addValue(int value) {
-//        this.valueList.add(value);
-//        return this;
-//    }
+    public ProportionsBar addValue(int value) {
+        this.valueList.add(value);
+        return this;
+    }
 
     public ProportionsBar addValues(Integer... values) {
         this.valueList.addAll(Arrays.asList(values));
-        ArrayList<Integer> k = getPercentValues(valueList);
-        //fill percent list for segment drawing
-        for (int i = 0; i < valueList.size(); i++) {
-            percentValueList.add(k.get(i));
-        }
+//        ArrayList<Integer> k = getPercentValues(valueList);
+//        //fill percent list used for segment drawing
+//        for (int i = 0; i < valueList.size(); i++) {
+//            percentValueList.add(k.get(i));
+//        }
         return this;
     }
 
@@ -219,6 +219,7 @@ public class ProportionsBar extends View {
     //return Int value from queue of colors
     private Integer getColorFromQueue() {
         Integer temp = colorQueueInt.poll();
+        //adds color back to queue
         colorQueueInt.offer(temp);
         return temp;
     }
@@ -256,6 +257,14 @@ public class ProportionsBar extends View {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+
+        ArrayList<Integer> k = getPercentValues(valueList);
+        //fill percent list used for segment drawing
+        for (int i = 0; i < valueList.size(); i++) {
+            percentValueList.add(k.get(i));
+        }
+
+        //check for the first view launch animation
         if (animated && firstLaunch) playAnimation();
         firstLaunch = false;
     }
