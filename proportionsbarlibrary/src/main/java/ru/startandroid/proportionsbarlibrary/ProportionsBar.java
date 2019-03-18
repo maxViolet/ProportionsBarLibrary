@@ -2,6 +2,7 @@ package ru.startandroid.proportionsbarlibrary;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -89,11 +90,6 @@ public class ProportionsBar extends View {
 
     public ProportionsBar addValues(Integer... values) {
         this.valueList.addAll(Arrays.asList(values));
-//        ArrayList<Integer> k = getPercentValues(valueList);
-//        //fill percent list used for segment drawing
-//        for (int i = 0; i < valueList.size(); i++) {
-//            percentValueList.add(k.get(i));
-//        }
         return this;
     }
 
@@ -121,8 +117,7 @@ public class ProportionsBar extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        colorQueueInt.clear();
-        colorQueueInt.addAll(colorsInt);
+        initColorQueue();
 
         //X coordinate of the last element
         float tempX = 0;
@@ -148,8 +143,8 @@ public class ProportionsBar extends View {
                     tempX = r;
                 }
                 //draw rectangle
-                drawRectangle(canvas, tempX, tempX + (w * percentValueList.get(k) / 100));
-                tempX = tempX + (w * percentValueList.get(k) / 100);
+                drawRectangle(canvas, tempX, tempX + (w * percentValueList.get(k) / 100) - gapSize / 2);
+                tempX = tempX + (w * percentValueList.get(k) / 100) - gapSize / 2;
 
             } else if (k == percentValueList.size() - 1) {
                 //LAST segment
@@ -177,18 +172,18 @@ public class ProportionsBar extends View {
                 }
                 //draw rectangle
                 paint.setColor(getColorFromQueue());
-                drawRectangle(canvas, tempX, tempX + (w * percentValueList.get(k) / 100) + gapSize);
-                tempX += (w * percentValueList.get(k) / 100) + gapSize;
+                drawRectangle(canvas, tempX, tempX + (w * percentValueList.get(k) / 100) - gapSize / 2);
+                tempX += (w * percentValueList.get(k) / 100) - gapSize / 2;
             }
         }
     }
 
-    private void drawRectangle(Canvas canvas, float start, float end) {
-        canvas.drawRect(start, 0, end, getHeight(), paint);
-    }
-
     private void drawArc(Canvas canvas, float start, float end, float h, int startAngle) {
         canvas.drawArc(start, 0, end, h, startAngle, 180, true, paint);
+    }
+
+    private void drawRectangle(Canvas canvas, float start, float end) {
+        canvas.drawRect(start, 0, end, getHeight(), paint);
     }
 
     private void drawGap(Canvas canvas, float start, float gap) {
@@ -196,6 +191,7 @@ public class ProportionsBar extends View {
         canvas.drawRect(start, 0, start + gap, getHeight(), paint);
     }
 
+    //transform array of values into array of proportions ( % values )
     private ArrayList<Integer> getPercentValues(ArrayList<Integer> val) {
         int sum = 0;
         //get sum of all arguments
@@ -216,6 +212,11 @@ public class ProportionsBar extends View {
         return percentValues;
     }
 
+    private void initColorQueue() {
+        colorQueueInt.clear();
+        colorQueueInt.addAll(colorsInt);
+    }
+
     //return Int value from queue of colors
     private Integer getColorFromQueue() {
         Integer temp = colorQueueInt.poll();
@@ -228,14 +229,16 @@ public class ProportionsBar extends View {
         //setup animations for proportionsBar4
         AnimatorSet animSet = new AnimatorSet();
         ObjectAnimator animIntList1 = ObjectAnimator
-                .ofInt(this, "FirstSegment", 2, this.percentValueList.get(0));
+                .ofInt(this, "FirstSegment", minimalSegmentValue, this.percentValueList.get(0));
         animIntList1.setDuration(animationDuration);
         ObjectAnimator animIntList2 = ObjectAnimator
-                .ofInt(this, "SecondSegment", 2, this.percentValueList.get(1));
+                .ofInt(this, "SecondSegment", this.percentValueList.get(0), this.percentValueList.get(1));
         animIntList2.setDuration(animationDuration);
         animSet.playTogether(animIntList1, animIntList2);
+//        animSet.playSequentially(animIntList1, animIntList2);
         animSet.start();
     }
+
 
     //setters are needed to animate custom view via external ObjectAnimator
     public void setFirstSegment(int i) {
@@ -244,9 +247,10 @@ public class ProportionsBar extends View {
         invalidate();
     }
 
-    public void setSecondSegment(int j) {
+
+    public int setSecondSegment(int j) {
         this.percentValueList.set(1, j);
-        invalidate();
+        return valueList.get(0);
     }
 
     public void setThirdSegment(int k) {
@@ -320,5 +324,13 @@ public class ProportionsBar extends View {
             }
         };
     }
-
+//    private void createAnimators(int[] valueList) {
+//        for (int v = 0; v < valueList.length; v++) {
+//            if (v == 0) {
+//                PropertyValuesHolder propertyX = PropertyValuesHolder.ofInt(valueList[v], 0, valueList[v]);
+//            } else {
+//                PropertyValuesHolder pvh1 = new PropertyValuesHolder.ofInt(valueList.get(v), valueList.get(v - 1), valueList.get(v));
+//            }
+//        }
+//    }
 }

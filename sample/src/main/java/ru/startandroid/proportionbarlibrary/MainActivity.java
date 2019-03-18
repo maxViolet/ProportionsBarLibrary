@@ -24,16 +24,21 @@ public class MainActivity extends AppCompatActivity {
         ProportionsBar proportionsBar1 = new ProportionsBar(this);
         proportionsBar1.setId(R.id.proportion_bar_1);
         proportionsBar1.showGaps(true)
-                .gapSize(1.2)
+                .gapSize(0.7)
                 .showRoundEdges(true)
-                .curveOfEdges(7.5)
-                .animated(true)
+//                .curveOfEdges(7.5)
+//                .animated(true)
                 .addIntColor(getResources().getColor(R.color.example1_1))
                 .addIntColor(getResources().getColor(R.color.example1_2))
                 .addIntColor(getResources().getColor(R.color.example1_3))
-                .addValue(33)
-                .addValue(22)
-                .addValue(28);
+                .addValue(1)
+                .addValue(11)
+                .addValue(1)
+                .addValue(11)
+                .addValue(11)
+                .addValue(11)
+                .addValue(11)
+                .addValue(1);
 
         LinearLayout container1 = findViewById(R.id.container_pb1);
         container1.addView(proportionsBar1);
@@ -86,5 +91,22 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout container4 = findViewById(R.id.container_pb4);
         container4.addView(proportionsBar4);
+    }
+    private void setup5thExample() {
+        ProportionsBar proportionsBar5 = new ProportionsBar(this);
+        proportionsBar5.setId(R.id.proportion_bar_4);
+        proportionsBar5.showGaps(true)
+                .gapSize(0.7)
+                .animated(true)
+                .animationDuration(4000)
+                .gapColor(Color.GRAY)
+                .showRoundEdges(true)
+                .addIntColors(getResources().getColor(R.color.example4_1),
+                        getResources().getColor(R.color.example4_2),
+                        getResources().getColor(R.color.example4_3))
+                .addValues(2300, 3600, 2100);
+
+        LinearLayout container4 = findViewById(R.id.container_pb4);
+        container4.addView(proportionsBar5);
     }
 }
