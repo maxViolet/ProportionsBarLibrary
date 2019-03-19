@@ -39,7 +39,7 @@ public class ProportionsBar extends View {
     private int animationDuration = 1500;
 
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    public List<Integer> percentValueList = new ArrayList<>();
+    public List<Float> percentValueList = new ArrayList<>();
     private List<Integer> colorsInt = new ArrayList<>();
     private Queue<Integer> colorQueueInt = new ArrayDeque<>();
 
@@ -144,7 +144,7 @@ public class ProportionsBar extends View {
                 }
                 //draw rectangle
                 drawRectangle(canvas, tempX, tempX + (w * percentValueList.get(k) / 100) - gapSize / 2);
-                tempX = tempX + (w * percentValueList.get(k) / 100) - gapSize / 2;
+                tempX +=(w * percentValueList.get(k) / 100) - gapSize / 2;
 
             } else if (k == percentValueList.size() - 1) {
                 //LAST segment
@@ -192,21 +192,21 @@ public class ProportionsBar extends View {
     }
 
     //transform array of values into array of proportions ( % values )
-    private ArrayList<Integer> getPercentValues(ArrayList<Integer> val) {
+    private ArrayList<Float> getPercentValues(ArrayList<Integer> val) {
         int sum = 0;
         //get sum of all arguments
         for (int iterator : val) {
             sum += iterator;
         }
 
-        ArrayList<Integer> percentValues = new ArrayList<>();
+        ArrayList<Float> percentValues = new ArrayList<>();
         //divide each element by sum to get % values
         for (int v = 0; v < val.size(); v++) {
             //check for minimalSegmentValue
             if ((val.get(v) * 100 / sum) != 0 && (val.get(v) * 100 / sum) < minimalSegmentValue) {
-                percentValues.add(minimalSegmentValue);
+                percentValues.add((float) minimalSegmentValue);
             } else {
-                percentValues.add(val.get(v) * 100 / sum);
+                percentValues.add((float) val.get(v) * 100 / sum);
             }
         }
         return percentValues;
@@ -229,10 +229,10 @@ public class ProportionsBar extends View {
         //setup animations for proportionsBar4
         AnimatorSet animSet = new AnimatorSet();
         ObjectAnimator animIntList1 = ObjectAnimator
-                .ofInt(this, "FirstSegment", minimalSegmentValue, this.percentValueList.get(0));
+                .ofFloat(this, "FirstSegment", minimalSegmentValue, this.percentValueList.get(0));
         animIntList1.setDuration(animationDuration);
         ObjectAnimator animIntList2 = ObjectAnimator
-                .ofInt(this, "SecondSegment", this.percentValueList.get(0), this.percentValueList.get(1));
+                .ofFloat(this, "SecondSegment", this.percentValueList.get(0), this.percentValueList.get(1));
         animIntList2.setDuration(animationDuration);
         animSet.playTogether(animIntList1, animIntList2);
 //        animSet.playSequentially(animIntList1, animIntList2);
@@ -241,19 +241,19 @@ public class ProportionsBar extends View {
 
 
     //setters are needed to animate custom view via external ObjectAnimator
-    public void setFirstSegment(int i) {
+    public void setFirstSegment(float i) {
         this.percentValueList.set(0, i);
         //redraw custom view on every argument change
         invalidate();
     }
 
 
-    public int setSecondSegment(int j) {
+    public int setSecondSegment(float j) {
         this.percentValueList.set(1, j);
         return valueList.get(0);
     }
 
-    public void setThirdSegment(int k) {
+    public void setThirdSegment(float k) {
         this.percentValueList.set(2, k);
         invalidate();
     }
@@ -262,7 +262,7 @@ public class ProportionsBar extends View {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        ArrayList<Integer> k = getPercentValues(valueList);
+        ArrayList<Float> k = getPercentValues(valueList);
         //fill percent list used for segment drawing
         for (int i = 0; i < valueList.size(); i++) {
             percentValueList.add(k.get(i));
