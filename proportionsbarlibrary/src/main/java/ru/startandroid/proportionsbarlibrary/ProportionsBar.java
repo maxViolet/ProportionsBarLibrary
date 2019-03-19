@@ -30,9 +30,11 @@ public class ProportionsBar extends View {
     //GAPs' color
     private int gapColor = getResources().getColor(R.color.white);
     //minimal segment value to be shown in % of the bar width (meaning: values between >0% and <2% will be shown as 2% section)
-    private int minimalSegmentValue = 2;
+    private int minimalSegmentValue = 1;
     //list of data values
     private ArrayList<Integer> valueList = new ArrayList<>();
+    //height of custom view in % of parent view
+    private double partH = 100;
 
     private boolean firstLaunch = true;
     private boolean animated = false;
@@ -143,8 +145,8 @@ public class ProportionsBar extends View {
                     tempX = r;
                 }
                 //draw rectangle
-                drawRectangle(canvas, tempX, tempX + (w * percentValueList.get(k) / 100) - gapSize / 2);
-                tempX +=(w * percentValueList.get(k) / 100) - gapSize / 2;
+                drawRectangle(canvas, tempX, tempX + (w * percentValueList.get(k) / 100) /*- gapSize / 2*/);
+                tempX += (w * percentValueList.get(k) / 100) /*- gapSize / 2*/;
 
             } else if (k == percentValueList.size() - 1) {
                 //LAST segment
@@ -153,16 +155,21 @@ public class ProportionsBar extends View {
                     drawGap(canvas, tempX, gapSize);
                     tempX += gapSize;
                 }
-                //draw rectangle
-                paint.setColor(getColorFromQueue());
-                drawRectangle(canvas, tempX, w - r);
-                tempX = w - r;
-                //draw arc
                 if (showRoundEdges) {
+                    //draw rectangle
+                    paint.setColor(getColorFromQueue());
+                    drawRectangle(canvas, tempX, w - r);
+                    tempX = w - r;
+                    //draw arc
                     drawArc(canvas, tempX - r, w, h, 270);
                 } else {
+                    paint.setColor(getColorFromQueue());
+//                    drawRectangle(canvas, tempX, w);
                     drawRectangle(canvas, tempX, w);
+                    tempX = 0;
+                    //end drawing
                 }
+
             } else {
                 //MID segments
                 //draw gap
@@ -172,8 +179,8 @@ public class ProportionsBar extends View {
                 }
                 //draw rectangle
                 paint.setColor(getColorFromQueue());
-                drawRectangle(canvas, tempX, tempX + (w * percentValueList.get(k) / 100) - gapSize / 2);
-                tempX += (w * percentValueList.get(k) / 100) - gapSize / 2;
+                drawRectangle(canvas, tempX, tempX + (w * percentValueList.get(k) / 100) /*- gapSize / 2*/);
+                tempX += (w * percentValueList.get(k) / 100) /*- gapSize / 2*/;
             }
         }
     }
@@ -229,16 +236,14 @@ public class ProportionsBar extends View {
         //setup animations for proportionsBar4
         AnimatorSet animSet = new AnimatorSet();
         ObjectAnimator animIntList1 = ObjectAnimator
-                .ofFloat(this, "FirstSegment", minimalSegmentValue, this.percentValueList.get(0));
+                .ofFloat(this, "FirstSegment", /*minimalSegmentValue*/0, this.percentValueList.get(0));
         animIntList1.setDuration(animationDuration);
         ObjectAnimator animIntList2 = ObjectAnimator
                 .ofFloat(this, "SecondSegment", this.percentValueList.get(0), this.percentValueList.get(1));
         animIntList2.setDuration(animationDuration);
         animSet.playTogether(animIntList1, animIntList2);
-//        animSet.playSequentially(animIntList1, animIntList2);
         animSet.start();
     }
-
 
     //setters are needed to animate custom view via external ObjectAnimator
     public void setFirstSegment(float i) {
@@ -324,13 +329,4 @@ public class ProportionsBar extends View {
             }
         };
     }
-//    private void createAnimators(int[] valueList) {
-//        for (int v = 0; v < valueList.length; v++) {
-//            if (v == 0) {
-//                PropertyValuesHolder propertyX = PropertyValuesHolder.ofInt(valueList[v], 0, valueList[v]);
-//            } else {
-//                PropertyValuesHolder pvh1 = new PropertyValuesHolder.ofInt(valueList.get(v), valueList.get(v - 1), valueList.get(v));
-//            }
-//        }
-//    }
 }

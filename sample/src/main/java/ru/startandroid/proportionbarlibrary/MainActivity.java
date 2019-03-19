@@ -18,24 +18,26 @@ public class MainActivity extends AppCompatActivity {
         setup2ndExample();
         setup3rdExample();
         setup4thExample();
+        setup5thExample();
     }
 
     private void setup1stExample() {
         ProportionsBar proportionsBar1 = new ProportionsBar(this);
         proportionsBar1.setId(R.id.proportion_bar_1);
-        proportionsBar1.showGaps(true)
-                .gapSize(0.7)
-                .showRoundEdges(true)
-//                .curveOfEdges(7.5)
+        proportionsBar1.showGaps(false)
+                .gapSize(0.8)
+                .showRoundEdges(false)
+                .curveOfEdges(5.5)
+                .minimalSegmentValue(1)
 //                .animated(true)
                 .addIntColor(getResources().getColor(R.color.example1_1))
                 .addIntColor(getResources().getColor(R.color.example1_2))
                 .addIntColor(getResources().getColor(R.color.example1_3))
-                .addValue(1)
+                .addValue(30)
+                .addValue(37)
+                .addValue(18)
                 .addValue(11)
-                .addValue(1)
-                .addValue(11)
-                .addValue(11)
+                .addValue(15)
                 .addValue(11)
                 .addValue(11)
                 .addValue(1);
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         ProportionsBar proportionsBar3 = new ProportionsBar(this);
         proportionsBar3.setId(R.id.proportion_bar_3);
         proportionsBar3.showGaps(true)
-                .showRoundEdges(false)
+                .showRoundEdges(true)
                 .gapSize(0.3)
                 .addIntColors(getResources().getColor(R.color.example3_1),
                         getResources().getColor(R.color.example3_2),
@@ -81,32 +83,33 @@ public class MainActivity extends AppCompatActivity {
         proportionsBar4.showGaps(true)
                 .gapSize(0.7)
                 .animated(true)
-                .animationDuration(4000)
+                .animationDuration(2000)
                 .gapColor(Color.BLACK)
-                .showRoundEdges(true)
+                .showRoundEdges(false)
                 .addIntColors(getResources().getColor(R.color.example4_1),
                         getResources().getColor(R.color.example4_2),
                         getResources().getColor(R.color.example4_3))
-                .addValues(4276, 3238, 2820);
+                .addValues(90, 333, 100);
 
         LinearLayout container4 = findViewById(R.id.container_pb4);
         container4.addView(proportionsBar4);
     }
+
     private void setup5thExample() {
         ProportionsBar proportionsBar5 = new ProportionsBar(this);
-        proportionsBar5.setId(R.id.proportion_bar_4);
+        proportionsBar5.setId(R.id.proportion_bar_5);
         proportionsBar5.showGaps(true)
                 .gapSize(0.7)
                 .animated(true)
-                .animationDuration(4000)
-                .gapColor(Color.GRAY)
-                .showRoundEdges(true)
+                .animationDuration(2000)
+                .gapColor(Color.BLACK)
+                .showRoundEdges(false)
                 .addIntColors(getResources().getColor(R.color.example4_1),
                         getResources().getColor(R.color.example4_2),
                         getResources().getColor(R.color.example4_3))
-                .addValues(2300, 3600, 2100);
+                .addValues(3300, 2200, 2100);
 
-        LinearLayout container4 = findViewById(R.id.container_pb4);
+        LinearLayout container4 = findViewById(R.id.container_pb5);
         container4.addView(proportionsBar5);
     }
 }

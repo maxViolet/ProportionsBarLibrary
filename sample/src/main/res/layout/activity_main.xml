@@ -63,12 +63,26 @@
         android:padding="@dimen/padding_8dp">
 
         <LinearLayout
-            android:id="@+id/container_pb4"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/padding_8dp"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <LinearLayout
+                android:id="@+id/container_pb4"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:orientation="horizontal"
+                >
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_pb5"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:orientation="horizontal">
+
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
