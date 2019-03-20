@@ -20,7 +20,7 @@ import java.util.Queue;
 public class ProportionsBar extends View {
     //draw round edges
     private boolean showRoundEdges;
-    //curveOfEdges of the round edges of the custom view
+    //curve of edges of the custom view (bigger value for longer curves)
     private double curveOfEdges = 1.4;
     //show GAPS
     private boolean showGaps = true;
@@ -37,7 +37,7 @@ public class ProportionsBar extends View {
 
     private boolean firstLaunch = true;
     private boolean animated = false;
-    private int animationDuration = 1500;
+    private int animationDuration = 1000;
 
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     public List<Float> percentValueList = new ArrayList<>();
@@ -125,16 +125,15 @@ public class ProportionsBar extends View {
     protected void onDraw(Canvas canvas) {
         initColorQueue();
 
-        //X coordinate of rounded edges, stands for radius of ark (depends from container view width and denominator)
-        float circleCenterX = (float) getWidth() / 100;
-        //arc radius
-        float r = (float) (circleCenterX * curveOfEdges);
+        //width of container view
+        float wBig = getWidth();
+        //rounded edge radius
+        float r = (float) (wBig * curveOfEdges / 100);
         //X coordinate of the last element
         float tempX = 0;
         //height of container view
         float h = (float) (getHeight() * scaleH / 100);
-        //width of container view
-        float wBig = getWidth();
+
         float wSmall;
         if (!showRoundEdges) {
             wSmall = wBig;
