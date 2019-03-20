@@ -121,18 +121,24 @@ public class ProportionsBar extends View {
     protected void onDraw(Canvas canvas) {
         initColorQueue();
 
+        //X coordinate of rounded edges, stands for radius of ark (depends from container view width and denominator)
+        float circleCenterX = (float) getWidth() / 100;
+        //arc radius
+        float r = (float) (circleCenterX * curveOfEdges);
         //X coordinate of the last element
         float tempX = 0;
         //height of container view
         float h = getHeight();
         //width of container view
-        float w = getWidth();
+        float wBig = getWidth();
+        float wSmall;
+        if (!showRoundEdges) {
+            wSmall = wBig;
+        } else {
+            wSmall = getWidth() - 2 * r;
+        }
         //size of gaps (depends from container view width and denominator)
-        float gapSize = (float) (getWidth() * this.gapSize / 100);
-        //X coordinate of rounded edges, stands for radius of ark (depends from container view width and denominator)
-        float circleCenterX = (float) getWidth() / 100;
-        //arc radius
-        float r = (float) (circleCenterX * curveOfEdges);
+        float gapSize = (float) (wSmall * this.gapSize / 100);
 
         //draw SEGMENTS based in the percent values proportions
         for (int k = 0; k < percentValueList.size(); k++) {
@@ -145,11 +151,11 @@ public class ProportionsBar extends View {
                     tempX = r;
                 }
                 //draw rectangle
-                drawRectangle(canvas, tempX, tempX + (w * percentValueList.get(k) / 100) /*- gapSize / 2*/);
-                tempX += (w * percentValueList.get(k) / 100) /*- gapSize / 2*/;
+                drawRectangle(canvas, tempX, tempX + (wSmall * percentValueList.get(k) / 100) - gapSize / 2);
+                tempX += (wSmall * percentValueList.get(k) / 100) - gapSize / 2;
 
             } else if (k == percentValueList.size() - 1) {
-                //LAST segment
+                //LAST SEGMENT
                 //draw gap
                 if (showGaps) {
                     drawGap(canvas, tempX, gapSize);
@@ -158,16 +164,14 @@ public class ProportionsBar extends View {
                 if (showRoundEdges) {
                     //draw rectangle
                     paint.setColor(getColorFromQueue());
-                    drawRectangle(canvas, tempX, w - r);
-                    tempX = w - r;
+                    drawRectangle(canvas, tempX, wBig - r);
+                    tempX = wBig - r;
                     //draw arc
-                    drawArc(canvas, tempX - r, w, h, 270);
+                    drawArc(canvas, tempX - r, wBig, h, 270);
                 } else {
                     paint.setColor(getColorFromQueue());
-//                    drawRectangle(canvas, tempX, w);
-                    drawRectangle(canvas, tempX, w);
+                    drawRectangle(canvas, tempX, wSmall);
                     tempX = 0;
-                    //end drawing
                 }
 
             } else {
@@ -179,8 +183,8 @@ public class ProportionsBar extends View {
                 }
                 //draw rectangle
                 paint.setColor(getColorFromQueue());
-                drawRectangle(canvas, tempX, tempX + (w * percentValueList.get(k) / 100) /*- gapSize / 2*/);
-                tempX += (w * percentValueList.get(k) / 100) /*- gapSize / 2*/;
+                drawRectangle(canvas, tempX, tempX + (wSmall * percentValueList.get(k) / 100) - gapSize / 2);
+                tempX += (wSmall * percentValueList.get(k) / 100) - gapSize / 2;
             }
         }
     }
@@ -236,7 +240,7 @@ public class ProportionsBar extends View {
         //setup animations for proportionsBar4
         AnimatorSet animSet = new AnimatorSet();
         ObjectAnimator animIntList1 = ObjectAnimator
-                .ofFloat(this, "FirstSegment", /*minimalSegmentValue*/0, this.percentValueList.get(0));
+                .ofFloat(this, "FirstSegment", 0, this.percentValueList.get(0));
         animIntList1.setDuration(animationDuration);
         ObjectAnimator animIntList2 = ObjectAnimator
                 .ofFloat(this, "SecondSegment", this.percentValueList.get(0), this.percentValueList.get(1));
