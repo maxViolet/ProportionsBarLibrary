@@ -2,7 +2,6 @@ package ru.startandroid.proportionsbarlibrary;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -34,7 +33,7 @@ public class ProportionsBar extends View {
     //list of data values
     private ArrayList<Integer> valueList = new ArrayList<>();
     //height of custom view in % of parent view
-    private double partH = 100;
+    private double scaleH = 100;
 
     private boolean firstLaunch = true;
     private boolean animated = false;
@@ -105,6 +104,11 @@ public class ProportionsBar extends View {
         return this;
     }
 
+    public ProportionsBar heightOfBar(int h) {
+        this.scaleH = h;
+        return this;
+    }
+
     public ProportionsBar(Context context) {
         super(context);
     }
@@ -128,7 +132,7 @@ public class ProportionsBar extends View {
         //X coordinate of the last element
         float tempX = 0;
         //height of container view
-        float h = getHeight();
+        float h = (float) (getHeight() * scaleH / 100);
         //width of container view
         float wBig = getWidth();
         float wSmall;
@@ -145,32 +149,32 @@ public class ProportionsBar extends View {
             if (k == 0) {
                 //FIRST segment
                 paint.setColor(getColorFromQueue());
-                //draw arc
+                //draw rounded edge
                 if (showRoundEdges) {
                     drawArc(canvas, 0, 2 * r, h, 90);
                     tempX = r;
                 }
-                //draw rectangle
-                drawRectangle(canvas, tempX, tempX + (wSmall * percentValueList.get(k) / 100) - gapSize / 2);
+                //draw first rectangle
+                drawRectangle(canvas, tempX, tempX + (wSmall * percentValueList.get(k) / 100) - gapSize / 2, h);
                 tempX += (wSmall * percentValueList.get(k) / 100) - gapSize / 2;
 
             } else if (k == percentValueList.size() - 1) {
                 //LAST SEGMENT
                 //draw gap
                 if (showGaps) {
-                    drawGap(canvas, tempX, gapSize);
+                    drawGap(canvas, tempX, gapSize, h);
                     tempX += gapSize;
                 }
                 if (showRoundEdges) {
-                    //draw rectangle
+                    //draw last rectangle
                     paint.setColor(getColorFromQueue());
-                    drawRectangle(canvas, tempX, wBig - r);
+                    drawRectangle(canvas, tempX, wBig - r, h);
                     tempX = wBig - r;
-                    //draw arc
+                    //draw rounded edge
                     drawArc(canvas, tempX - r, wBig, h, 270);
                 } else {
                     paint.setColor(getColorFromQueue());
-                    drawRectangle(canvas, tempX, wSmall);
+                    drawRectangle(canvas, tempX, wSmall, h);
                     tempX = 0;
                 }
 
@@ -178,12 +182,12 @@ public class ProportionsBar extends View {
                 //MID segments
                 //draw gap
                 if (showGaps) {
-                    drawGap(canvas, tempX, gapSize);
+                    drawGap(canvas, tempX, gapSize, h);
                     tempX += gapSize;
                 }
-                //draw rectangle
+                //draw mid rectangle
                 paint.setColor(getColorFromQueue());
-                drawRectangle(canvas, tempX, tempX + (wSmall * percentValueList.get(k) / 100) - gapSize / 2);
+                drawRectangle(canvas, tempX, tempX + (wSmall * percentValueList.get(k) / 100) - gapSize / 2, h);
                 tempX += (wSmall * percentValueList.get(k) / 100) - gapSize / 2;
             }
         }
@@ -193,13 +197,13 @@ public class ProportionsBar extends View {
         canvas.drawArc(start, 0, end, h, startAngle, 180, true, paint);
     }
 
-    private void drawRectangle(Canvas canvas, float start, float end) {
-        canvas.drawRect(start, 0, end, getHeight(), paint);
+    private void drawRectangle(Canvas canvas, float start, float end, float h) {
+        canvas.drawRect(start, 0, end, h, paint);
     }
 
-    private void drawGap(Canvas canvas, float start, float gap) {
+    private void drawGap(Canvas canvas, float start, float gap, float h) {
         paint.setColor(gapColor);
-        canvas.drawRect(start, 0, start + gap, getHeight(), paint);
+        canvas.drawRect(start, 0, start + gap, h, paint);
     }
 
     //transform array of values into array of proportions ( % values )

@@ -25,21 +25,22 @@ public class MainActivity extends AppCompatActivity {
         ProportionsBar proportionsBar1 = new ProportionsBar(this);
         proportionsBar1.setId(R.id.proportion_bar_1);
         proportionsBar1.showGaps(true)
-                .gapSize(0.6)
+                .gapSize(0.8)
+                .heightOfBar(80)
                 .showRoundEdges(true)
-                .curveOfEdges(5.5)
+                .curveOfEdges(3.5)
                 .minimalSegmentValue(1)
-//                .animated(true)
+                .animated(true)
                 .addIntColor(getResources().getColor(R.color.example1_1))
                 .addIntColor(getResources().getColor(R.color.example1_2))
                 .addIntColor(getResources().getColor(R.color.example1_3))
                 .addValue(11)
                 .addValue(37)
-                .addValue(18)
-                .addValue(11)
+//                .addValue(18)
+//                .addValue(11)
                 .addValue(15)
-                .addValue(11)
-                .addValue(11)
+//                .addValue(11)
+//                .addValue(11)
                 .addValue(11);
 
         LinearLayout container1 = findViewById(R.id.container_pb1);
