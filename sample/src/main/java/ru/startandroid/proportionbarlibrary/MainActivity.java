@@ -30,18 +30,15 @@ public class MainActivity extends AppCompatActivity {
                 .showRoundEdges(true)
                 .curveOfEdges(3.5)
                 .minimalSegmentValue(1)
-                .animated(true)
+//                .animated(true)
+//                .animationDuration(3000)
                 .addIntColor(getResources().getColor(R.color.example1_1))
                 .addIntColor(getResources().getColor(R.color.example1_2))
                 .addIntColor(getResources().getColor(R.color.example1_3))
-                .addValue(11)
+                .addValue(1)
                 .addValue(37)
-//                .addValue(18)
-//                .addValue(11)
-                .addValue(15)
-//                .addValue(11)
-//                .addValue(11)
-                .addValue(11);
+                .addValue(11)
+                .addValue(1);
 
         LinearLayout container1 = findViewById(R.id.container_pb1);
         container1.addView(proportionsBar1);

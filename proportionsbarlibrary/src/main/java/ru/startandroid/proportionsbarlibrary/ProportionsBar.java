@@ -29,7 +29,7 @@ public class ProportionsBar extends View {
     //GAPs' color
     private int gapColor = getResources().getColor(R.color.white);
     //minimal segment value to be shown in % of the bar width (meaning: values between >0% and <2% will be shown as 2% section)
-    private int minimalSegmentValue = 1;
+    private int minimalSegmentValue = 2;
     //list of data values
     private ArrayList<Integer> valueList = new ArrayList<>();
     //height of custom view in % of parent view
@@ -85,12 +85,14 @@ public class ProportionsBar extends View {
     }
 
     public ProportionsBar addValue(int value) {
-        this.valueList.add(value);
+        if (checkValue(value)) this.valueList.add(value);
         return this;
     }
 
-    public ProportionsBar addValues(Integer... values) {
-        this.valueList.addAll(Arrays.asList(values));
+    public ProportionsBar addValues(int... values) {
+        for (int iterator : values) {
+            if (checkValue(iterator)) this.valueList.add(iterator);
+        }
         return this;
     }
 
@@ -154,8 +156,10 @@ public class ProportionsBar extends View {
                     tempX = r;
                 }
                 //draw first rectangle
-                drawRectangle(canvas, tempX, tempX + (wSmall * percentValueList.get(k) / 100) - gapSize / 2, h);
-                tempX += (wSmall * percentValueList.get(k) / 100) - gapSize / 2;
+//                if(!(showRoundEdges && percentValueList.get(k) == minimalSegmentValue)) {
+                    drawRectangle(canvas, tempX, tempX + (wSmall * percentValueList.get(k) / 100) - gapSize / 2, h);
+                    tempX += (wSmall * percentValueList.get(k) / 100) - gapSize / 2;
+//                }
 
             } else if (k == percentValueList.size() - 1) {
                 //LAST SEGMENT
@@ -217,7 +221,7 @@ public class ProportionsBar extends View {
         //divide each element by sum to get % values
         for (int v = 0; v < val.size(); v++) {
             //check for minimalSegmentValue
-            if ((val.get(v) * 100 / sum) != 0 && (val.get(v) * 100 / sum) < minimalSegmentValue) {
+            if ((val.get(v) * 100 / sum) > 0 && (val.get(v) * 100 / sum) < minimalSegmentValue) {
                 percentValues.add((float) minimalSegmentValue);
             } else {
                 percentValues.add((float) val.get(v) * 100 / sum);
@@ -239,6 +243,12 @@ public class ProportionsBar extends View {
         return temp;
     }
 
+    public boolean checkValue(int v) {
+        if (v > 0) return true;
+        else return false;
+    }
+
+    //currently only for percentValueList.size() = 3
     public void playAnimation() {
         //setup animations for proportionsBar4
         AnimatorSet animSet = new AnimatorSet();
@@ -258,7 +268,6 @@ public class ProportionsBar extends View {
         //redraw custom view on every argument change
         invalidate();
     }
-
 
     public int setSecondSegment(float j) {
         this.percentValueList.set(1, j);
