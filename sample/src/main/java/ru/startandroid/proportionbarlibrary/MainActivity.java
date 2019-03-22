@@ -35,10 +35,10 @@ public class MainActivity extends AppCompatActivity {
                 .addIntColor(getResources().getColor(R.color.example1_1))
                 .addIntColor(getResources().getColor(R.color.example1_2))
                 .addIntColor(getResources().getColor(R.color.example1_3))
-                .addValue(1)
+                .addValue(4)
                 .addValue(37)
                 .addValue(11)
-                .addValue(1);
+                .addValue(4);
 
         LinearLayout container1 = findViewById(R.id.container_pb1);
         container1.addView(proportionsBar1);
