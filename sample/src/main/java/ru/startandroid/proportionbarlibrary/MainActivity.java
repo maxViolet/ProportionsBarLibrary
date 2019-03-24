@@ -38,7 +38,10 @@ public class MainActivity extends AppCompatActivity {
                 .addValue(4)
                 .addValue(37)
                 .addValue(11)
-                .addValue(4);
+                .addValue(4)
+                .addValue(4)
+                .addValue(4)
+        ;
 
         LinearLayout container1 = findViewById(R.id.container_pb1);
         container1.addView(proportionsBar1);
