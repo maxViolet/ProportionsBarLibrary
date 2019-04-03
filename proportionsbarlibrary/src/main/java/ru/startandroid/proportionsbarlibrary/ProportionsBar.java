@@ -140,10 +140,10 @@ public class ProportionsBar extends View {
         if (!showRoundEdges) {
             wSmall = wBig;
         } else {
-            wSmall = getWidth() - 2 * r;
+            wSmall = (float) (getWidth() - 2 * r - gapSize * (valueList.size() - 1));
         }
         //size of gaps (depends from container view width and denominator)
-        float gapSize = (float) (wSmall * this.gapSize / 100);
+        float gapSize = (float) (wBig * this.gapSize / 100);
 
         //draw SEGMENTS based in the percent values proportions
         for (int k = 0; k < percentValueList.size(); k++) {
