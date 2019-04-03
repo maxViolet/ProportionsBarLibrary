@@ -156,9 +156,10 @@ public class ProportionsBar extends View {
                     tempX = r;
                 }
                 //draw first rectangle
+                //TODO: don't show 1st segment if it's length == minimalSegmentValue && showRoundEdges=true
 //                if(!(showRoundEdges && percentValueList.get(k) == minimalSegmentValue)) {
-                    drawRectangle(canvas, tempX-1, tempX + (wSmall * percentValueList.get(k) / 100) - gapSize / 2, h);
-                    tempX += (wSmall * percentValueList.get(k) / 100) - gapSize / 2;
+                drawRectangle(canvas, tempX - 1, tempX + (wSmall * percentValueList.get(k) / 100) - gapSize / 2, h);
+                tempX += (wSmall * percentValueList.get(k) / 100) - gapSize / 2;
 //                }
 
             } else if (k == percentValueList.size() - 1) {
@@ -171,7 +172,7 @@ public class ProportionsBar extends View {
                 if (showRoundEdges) {
                     //draw last rectangle
                     paint.setColor(getColorFromQueue());
-                    drawRectangle(canvas, tempX, wBig - r+1, h);
+                    drawRectangle(canvas, tempX, wBig - r + 1, h);
                     tempX = wBig - r;
                     //draw rounded edge
                     drawArc(canvas, tempX - r, wBig, h, 270);
