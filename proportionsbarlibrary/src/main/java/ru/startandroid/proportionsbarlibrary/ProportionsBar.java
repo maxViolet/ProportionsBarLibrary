@@ -245,8 +245,7 @@ public class ProportionsBar extends View {
     }
 
     public boolean checkValue(int v) {
-        if (v > 0) return true;
-        else return false;
+        return v > 0;
     }
 
     //currently only for percentValueList.size() = 3
