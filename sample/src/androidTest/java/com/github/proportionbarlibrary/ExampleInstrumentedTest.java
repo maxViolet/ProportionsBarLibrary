@@ -1,4 +1,4 @@
-package ru.startandroid.proportionsbarlibrary;
+package com.github.proportionbarlibrary;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("ru.startandroid.proportionsbarlibrary.test", appContext.getPackageName());
+        assertEquals("ru.startandroid.proportionbarlibrary", appContext.getPackageName());
     }
 }

@@ -1,4 +1,4 @@
-package ru.startandroid.proportionbarlibrary;
+package com.github.proportionbarlibrary;
 
 import org.junit.Test;
 

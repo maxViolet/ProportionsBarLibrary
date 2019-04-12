@@ -1,11 +1,11 @@
-package ru.startandroid.proportionbarlibrary;
+package com.github.proportionbarlibrary;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
 
-import ru.startandroid.proportionsbarlibrary.ProportionsBar;
+import com.github.proportionsbarlibrary.ProportionsBar;
 
 public class MainActivity extends AppCompatActivity {
 
