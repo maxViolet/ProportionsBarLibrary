@@ -5,6 +5,7 @@ An easy way to visualize in proportions any of your data.
 ![text](assets/cropped_examples.png)
 
 ## Latest Version
+[![](https://jitpack.io/v/maxViolet/ProportionsBarLibrary.svg)](https://jitpack.io/#maxViolet/ProportionsBarLibrary)
 
 ## How to use
 
