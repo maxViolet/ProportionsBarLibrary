@@ -28,5 +28,6 @@ dependencies {
 
     //proportionsbarlibrary
     implementation project (':proportionsbarlibrary')
+//    implementation 'com.github.maxViolet:ProportionsBarLibrary:-SNAPSHOT'
 
 }
