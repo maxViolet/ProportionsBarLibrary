@@ -36,7 +36,8 @@ proportionsBar.addValues(11, 30, 24, 12, 41, 27);
 ### Adding colors
 *Where are can be less colors than number of values
 ```java
-proportionsBar.addColors(getResources().getColor(R.color.example1), getResources().getColor(R.color.example2), getResources().getColor(R.color.example3));
+proportionsBar.addColors(getResources().getColor(R.color.example1), getResources().getColor(R.color.example2),getResources().getColor(R.color.example3));
+proportionsBar.addColors("#81DAF5", "#008db9", "#1c0a63")
 ```
 
 ### Styling the view
