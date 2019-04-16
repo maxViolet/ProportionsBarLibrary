@@ -54,8 +54,8 @@ public class ProportionsBar extends View {
         return this;
     }
 
-    public ProportionsBar radiusRoundedCorners(double curve) {
-        this.roundedCornerRadius = curve;
+    public ProportionsBar radiusRoundedCorners(double radius) {
+        this.roundedCornerRadius = radius;
         return this;
     }
 
