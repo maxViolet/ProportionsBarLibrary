@@ -12,7 +12,7 @@ An easy way to visualize in proportions any of your data.
 ### Configuring your project dependencies
 ```groovy
 dependencies {
-    implementation 'com.github.maxViolet:ProportionsBarLibrary:-4744bd3b5b-1'
+    implementation 'com.github.maxViolet:ProportionsBarLibrary:0.1.0'
 }
 ```
 
