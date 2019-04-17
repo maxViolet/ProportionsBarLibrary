@@ -8,6 +8,14 @@ An easy way to visualize in proportions any of your data.
 [![](https://jitpack.io/v/maxViolet/ProportionsBarLibrary.svg)](https://jitpack.io/#maxViolet/ProportionsBarLibrary)
 
 ## How to use
+### Add this to **top** level `build.gradle`:
+```groovy
+ allprojects {
+        repositories {
+            maven { url "https://jitpack.io" }
+        }
+    }
+```
 
 ### Configuring your project dependencies
 ```groovy
