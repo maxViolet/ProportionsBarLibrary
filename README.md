@@ -20,25 +20,25 @@ An easy way to visualize in proportions any of your data.
 ### Configuring your project dependencies
 ```groovy
 dependencies {
-    implementation 'com.github.maxViolet:ProportionsBarLibrary:0.1.0'
+    implementation 'com.github.maxViolet:ProportionsBarLibrary:0.1.1'
 }
 ```
 
-### Creating the view
+### Creating the view via code
 ```java
 ProportionsBar proportionsBar = new ProportionsBar(context);
 proportionsBar.setId(R.id.proportions_bar_1);
 ```
 
-### Adding the view
+### Adding the view to container view (LinearLayout in this case)
 ```java
 LinearLayout container = findViewById(R.id.container_pb);
 container.addView(proportionsBar);
 ```
 
-### Adding single values
+### Adding values (accepts any Number.class)
 ```java
-proportionsBar.addValues(11, 30, 24, 12, 41, 27);
+proportionsBar.addValues(11, 30.0, 24.21, -12.1, 41, 27.999);
 ```
 
 ### Adding colors

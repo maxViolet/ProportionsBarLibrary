@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 .radiusRoundedCorners(3.5)
                 .minimalSegmentValue(1)
                 .addColors("#81DAF5", "#008db9", "#1c0a63")
-                .addValues(4, 37, 11, 4, 4, 4);
+                .addValues(4.0, 37, 11, 3.9, -4.89, 4);
 
         LinearLayout container1 = findViewById(R.id.container_pb1);
         container1.addView(proportionsBar1);
@@ -45,13 +45,19 @@ public class MainActivity extends AppCompatActivity {
                 .addColors(getResources().getColor(R.color.example2_1),
                         getResources().getColor(R.color.example2_2),
                         getResources().getColor(R.color.example2_3))
-                .addValues(11, 30, 24, 12, 41, 27);
+                .addValues(11.8, 30.05, 24.79, 12.001, 41.238, 27.11);
 
         LinearLayout container2 = findViewById(R.id.container_pb2);
         container2.addView(proportionsBar2);
     }
 
     private void setup3rdExample() {
+        long a = 22;
+        short b = 3;
+        int c = -10;
+        byte d = 9;
+        float e = -20;
+
         ProportionsBar proportionsBar3 = new ProportionsBar(this);
         proportionsBar3.setId(R.id.proportions_bar_3);
         proportionsBar3.showGaps(true)
@@ -62,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         getResources().getColor(R.color.example3_3),
                         getResources().getColor(R.color.example3_4),
                         getResources().getColor(R.color.example3_5))
-                .addValues(33, 2, 11, 40, 20);
+                .addValues(a, b, c, d, e);
 
         LinearLayout container3 = findViewById(R.id.container_pb3);
         container3.addView(proportionsBar3);

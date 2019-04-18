@@ -32,7 +32,9 @@ public class ProportionsBar extends View {
     //minimal segment value to be shown in % of the bar width (meaning: values between >0% and <2% will be shown as 2% section)
     private int minimalSegmentValue = 2;
     //list of data values
-    private ArrayList<Integer> valueList = new ArrayList<>();
+    private ArrayList<Double> valueDoubleList = new ArrayList<>();
+    //    private ArrayList<Double> valueDoubleList = new ArrayList<>();
+//    private ArrayList<Float> valueFloatList = new ArrayList<>();
     //height of custom view in % of parent view
     private double scaleH = 100;
 
@@ -42,12 +44,15 @@ public class ProportionsBar extends View {
     //animation duration
     private int animationDuration = 1000;
 
-    public List<Float> percentValueList = new ArrayList<>();
+    //proportion values list
+    public List<Float> proportionValueList = new ArrayList<>();
+
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private List<Integer> intColors = new ArrayList<>();
     private List<String> stringColors = new ArrayList<>();
+
     private Queue<Integer> colorQueue = new ArrayDeque<>();
-    ArrayList<String> defaultColors = new ArrayList<>(Arrays.asList("#81DAF5", "#008db9", "#1c0a63"));
+    private final ArrayList<String> defaultColors = new ArrayList<>(Arrays.asList("#81DAF5", "#008db9", "#1c0a63"));
 
     public ProportionsBar showRoundedCorners(boolean show) {
         this.showRoundedCorners = show;
@@ -73,6 +78,7 @@ public class ProportionsBar extends View {
         this.gapColor = gapColor;
         return this;
     }
+
     public ProportionsBar gapColor(String gapColor) {
         this.gapColor = Color.parseColor(gapColor);
         return this;
@@ -93,9 +99,10 @@ public class ProportionsBar extends View {
         return this;
     }
 
-    public ProportionsBar addValues(int... values) {
-        for (int iterator : values) {
-            if (checkValue(iterator)) this.valueList.add(iterator);
+    public ProportionsBar addValues(Number... values) {
+        for (Number iterator : values) {
+            if (iterator != null)
+                this.valueDoubleList.add(Math.abs(Double.valueOf(String.valueOf(iterator))));
         }
         return this;
     }
@@ -128,6 +135,22 @@ public class ProportionsBar extends View {
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        ArrayList<Float> tempDouble = new ArrayList<>();
+        //instantiate proportions list
+        if (valueDoubleList != null) tempDouble = getProportionValues(valueDoubleList);
+        //fill percent list used for segment drawing
+        if (valueDoubleList != null) {
+            for (int i = 0; i < valueDoubleList.size(); i++)
+                proportionValueList.add(tempDouble.get(i));
+        }
+        //check for the first view launch animation
+        if (animated && firstLaunch) playAnimation();
+        firstLaunch = false;
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         initColorQueue();
 
@@ -144,13 +167,13 @@ public class ProportionsBar extends View {
         if (!showRoundedCorners) {
             wSmall = wBig;
         } else {
-            wSmall = (float) (getWidth() - 2 * r - gapSize * (valueList.size() - 1));
+            wSmall = (float) (getWidth() - 2 * r - gapSize * (valueDoubleList.size() - 1));
         }
         //size of gaps (depends from container view width and denominator)
         float gapSize = (float) (wBig * this.gapSize / 100);
 
         //draw SEGMENTS based in the percent values proportions
-        for (int k = 0; k < percentValueList.size(); k++) {
+        for (int k = 0; k < proportionValueList.size(); k++) {
             if (k == 0) {
                 //FIRST segment
                 paint.setColor(getColorFromQueue());
@@ -160,11 +183,10 @@ public class ProportionsBar extends View {
                     tempX = r;
                 }
                 //draw first rectangle
-                drawRectangle(canvas, tempX - 1, tempX + (wSmall * percentValueList.get(k) / 100) - gapSize / 2, h);
-                tempX += (wSmall * percentValueList.get(k) / 100) - gapSize / 2;
-//                }
+                drawRectangle(canvas, tempX - 1, tempX + (wSmall * proportionValueList.get(k) / 100) - gapSize / 2, h);
+                tempX += (wSmall * proportionValueList.get(k) / 100) - gapSize / 2;
 
-            } else if (k == percentValueList.size() - 1) {
+            } else if (k == proportionValueList.size() - 1) {
                 //LAST SEGMENT
                 //draw gap
                 if (showGaps) {
@@ -183,7 +205,6 @@ public class ProportionsBar extends View {
                     drawRectangle(canvas, tempX, wSmall, h);
                     tempX = 0;
                 }
-
             } else {
                 //MID segments
                 //draw gap
@@ -193,8 +214,8 @@ public class ProportionsBar extends View {
                 }
                 //draw mid rectangle
                 paint.setColor(getColorFromQueue());
-                drawRectangle(canvas, tempX, tempX + (wSmall * percentValueList.get(k) / 100) - gapSize / 2, h);
-                tempX += (wSmall * percentValueList.get(k) / 100) - gapSize / 2;
+                drawRectangle(canvas, tempX, tempX + (wSmall * proportionValueList.get(k) / 100) - gapSize / 2, h);
+                tempX += (wSmall * proportionValueList.get(k) / 100) - gapSize / 2;
             }
         }
     }
@@ -213,20 +234,18 @@ public class ProportionsBar extends View {
     }
 
     //transform array of values into array of proportions ( % values )
-    private ArrayList<Float> getPercentValues(ArrayList<Integer> val) {
-        int sum = 0;
+    private ArrayList<Float> getProportionValues(ArrayList<Double> val) {
+        double sum = 0;
         ArrayList<Float> percentValues = new ArrayList<>();
-
         //get sum of all arguments
-        for (int iterator : val) sum += iterator;
-
+        for (double iterator : val) sum += iterator;
         //divide each element by sum to get % values
         for (int v = 0; v < val.size(); v++) {
             //check for minimalSegmentValue
             if ((val.get(v) * 100 / sum) > 0 && (val.get(v) * 100 / sum) < minimalSegmentValue) {
                 percentValues.add((float) minimalSegmentValue);
             } else {
-                percentValues.add((float) val.get(v) * 100 / sum);
+                percentValues.add((float) (val.get(v) * 100 / sum));
             }
         }
         return percentValues;
@@ -256,19 +275,15 @@ public class ProportionsBar extends View {
         return temp;
     }
 
-    public boolean checkValue(int v) {
-        return v > 0;
-    }
-
-    //currently only for percentValueList.size() = 3
+    //currently only for proportionValueList.size() = 3
     public void playAnimation() {
         //setup animations for proportionsBar4
         AnimatorSet animSet = new AnimatorSet();
         ObjectAnimator animIntList1 = ObjectAnimator
-                .ofFloat(this, "FirstSegment", 0, this.percentValueList.get(0));
+                .ofFloat(this, "FirstSegment", 0, this.proportionValueList.get(0));
         animIntList1.setDuration(animationDuration);
         ObjectAnimator animIntList2 = ObjectAnimator
-                .ofFloat(this, "SecondSegment", this.percentValueList.get(0), this.percentValueList.get(1));
+                .ofFloat(this, "SecondSegment", this.proportionValueList.get(0), this.proportionValueList.get(1));
         animIntList2.setDuration(animationDuration);
         animSet.playTogether(animIntList1, animIntList2);
         animSet.start();
@@ -276,34 +291,19 @@ public class ProportionsBar extends View {
 
     //setters are needed to animate custom view via external ObjectAnimator
     public void setFirstSegment(float i) {
-        this.percentValueList.set(0, i);
+        this.proportionValueList.set(0, i);
         //redraw custom view on every argument change
         invalidate();
     }
 
-    public int setSecondSegment(float j) {
-        this.percentValueList.set(1, j);
-        return valueList.get(0);
-    }
-
-    public void setThirdSegment(float k) {
-        this.percentValueList.set(2, k);
+    public void setSecondSegment(float j) {
+        this.proportionValueList.set(1, j);
         invalidate();
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-
-        ArrayList<Float> k = getPercentValues(valueList);
-        //fill percent list used for segment drawing
-        for (int i = 0; i < valueList.size(); i++) {
-            percentValueList.add(k.get(i));
-        }
-
-        //check for the first view launch animation
-        if (animated && firstLaunch) playAnimation();
-        firstLaunch = false;
+    public void setThirdSegment(float k) {
+        this.proportionValueList.set(2, k);
+        invalidate();
     }
 
     @Override
