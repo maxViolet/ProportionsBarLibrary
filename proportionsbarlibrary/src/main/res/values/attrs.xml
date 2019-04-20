@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ProportionsBar">
+        <attr name="android:height" />
+        <attr name="android:width" />
+        <!--add values/colors-->
+        <attr name="addValue" format="integer|float" />
+        <attr name="addColor" format="color|string" />
+        <!--view styling-->
+        <attr name="showRoundedCorners" format="boolean" />
+        <attr name="radiusRoundedCorners" format="integer|float" />
+        <attr name="showGap" format="boolean" />
+        <attr name="gapSize" format="integer" />
+        <attr name="gapColor" format="color|string" />
+    </declare-styleable>
+</resources>

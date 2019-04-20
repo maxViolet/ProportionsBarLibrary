@@ -3,6 +3,7 @@ package com.github.proportionsbarlibrary;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -128,10 +129,19 @@ public class ProportionsBar extends View {
 
     public ProportionsBar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initAttr(attrs);
     }
 
     public ProportionsBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initAttr(attrs);
+    }
+
+    private void initAttr(AttributeSet attr){
+        TypedArray typedArray = getContext().obtainStyledAttributes(attr, R.styleable.ProportionsBar);
+        this.valueDoubleList.add((double)typedArray.getInt(0,R.styleable.ProportionsBar_addValue));
+        //todo read from AttributeSet
+        typedArray.recycle();
     }
 
     @Override

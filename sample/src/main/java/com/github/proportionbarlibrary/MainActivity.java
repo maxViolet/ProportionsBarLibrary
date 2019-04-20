@@ -31,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
                 .radiusRoundedCorners(3.5)
                 .minimalSegmentValue(1)
                 .addColors("#81DAF5", "#008db9", "#1c0a63")
-                .addValues(4.0, 37, 11, 3.9, -4.89, 4);
+//                .addValues(4.0, 37, 11, 3.9, -4.89, 4);
+                .addValues(0.001, 0.002, 0.003);
 
         LinearLayout container1 = findViewById(R.id.container_pb1);
         container1.addView(proportionsBar1);
