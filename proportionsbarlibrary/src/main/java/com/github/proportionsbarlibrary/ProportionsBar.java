@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -23,7 +22,7 @@ public class ProportionsBar extends View {
     //draw rounded edges
     private boolean showRoundedCorners;
     //radius of the rounded corners
-    private double roundedCornerRadius = 1.4;
+    private double radiusRoundedCorners = 1.4;
     //show GAPS
     private boolean showGaps = true;
     //GAPs' size in % of the container view's width
@@ -57,16 +56,19 @@ public class ProportionsBar extends View {
 
     public ProportionsBar showRoundedCorners(boolean show) {
         this.showRoundedCorners = show;
+        invalidate();
         return this;
     }
 
     public ProportionsBar radiusRoundedCorners(double radius) {
-        this.roundedCornerRadius = radius;
+        this.radiusRoundedCorners = radius;
+        invalidate();
         return this;
     }
 
     public ProportionsBar showGaps(boolean show) {
         this.showGaps = show;
+        invalidate();
         return this;
     }
 
@@ -77,11 +79,13 @@ public class ProportionsBar extends View {
 
     public ProportionsBar gapColor(int gapColor) {
         this.gapColor = gapColor;
+        invalidate();
         return this;
     }
 
     public ProportionsBar gapColor(String gapColor) {
         this.gapColor = Color.parseColor(gapColor);
+        invalidate();
         return this;
     }
 
@@ -105,6 +109,7 @@ public class ProportionsBar extends View {
             if (iterator != null)
                 this.valueDoubleList.add(Math.abs(Double.valueOf(String.valueOf(iterator))));
         }
+        invalidate();
         return this;
     }
 
@@ -120,6 +125,7 @@ public class ProportionsBar extends View {
 
     public ProportionsBar heightOfBar(int h) {
         this.scaleH = h;
+        invalidate();
         return this;
     }
 
@@ -129,28 +135,19 @@ public class ProportionsBar extends View {
 
     public ProportionsBar(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initAttr(attrs);
     }
 
-    public ProportionsBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ProportionsBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initAttr(attrs);
-    }
-
-    private void initAttr(AttributeSet attr){
-        TypedArray typedArray = getContext().obtainStyledAttributes(attr, R.styleable.ProportionsBar);
-        this.valueDoubleList.add((double)typedArray.getInt(0,R.styleable.ProportionsBar_addValue));
-        //todo read from AttributeSet
-        typedArray.recycle();
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         ArrayList<Float> tempDouble = new ArrayList<>();
-        //instantiate proportions list
+        //instantiate proportion list
         if (valueDoubleList != null) tempDouble = getProportionValues(valueDoubleList);
-        //fill percent list used for segment drawing
+        //fill proportion list used for segment drawing in onDraw()
         if (valueDoubleList != null) {
             for (int i = 0; i < valueDoubleList.size(); i++)
                 proportionValueList.add(tempDouble.get(i));
@@ -167,7 +164,7 @@ public class ProportionsBar extends View {
         //width of container view
         float wBig = getWidth();
         //rounded edge radius
-        float r = (float) (wBig * roundedCornerRadius / 100);
+        float r = (float) (wBig * radiusRoundedCorners / 100);
         //X coordinate of the last element
         float tempX = 0;
         //height of container view
@@ -266,7 +263,7 @@ public class ProportionsBar extends View {
         if (intColors != null) colorQueue.addAll(intColors);
         if (stringColors != null) colorQueue.addAll(transformStringColorToInt(stringColors));
         //add default color if colorQueue is empty
-        if (colorQueue != null) {
+        if (colorQueue == null) {
             colorQueue.addAll(transformStringColorToInt(defaultColors));
         }
     }
