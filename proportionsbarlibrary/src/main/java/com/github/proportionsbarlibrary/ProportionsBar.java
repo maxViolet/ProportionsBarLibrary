@@ -7,6 +7,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -231,7 +232,8 @@ public class ProportionsBar extends View {
     }
 
     private void drawArc(Canvas canvas, float start, float end, float h, int startAngle) {
-        canvas.drawArc(start, 0, end, h, startAngle, 180, true, paint);
+        RectF rect = new RectF(start, 0, end, h);
+        canvas.drawArc(rect, startAngle, 180, true, paint);
     }
 
     private void drawRectangle(Canvas canvas, float start, float end, float h) {
