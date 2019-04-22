@@ -3,7 +3,6 @@ package com.github.proportionsbarlibrary;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -32,8 +31,8 @@ public class ProportionsBar extends View {
     //minimal segment value to be shown in % of the bar width (meaning: values between >0% and <2% will be shown as 2% section)
     private int minimalSegmentValue = 2;
     //list of data values
-    private ArrayList<Double> valueDoubleList = new ArrayList<>();
-    //    private ArrayList<Double> valueDoubleList = new ArrayList<>();
+    private ArrayList<Float> valueFloatList = new ArrayList<>();
+    //    private ArrayList<Double> valueFloatList = new ArrayList<>();
 //    private ArrayList<Float> valueFloatList = new ArrayList<>();
     //height of custom view in % of parent view
     private double scaleH = 100;
@@ -107,7 +106,7 @@ public class ProportionsBar extends View {
     public ProportionsBar addValues(Number... values) {
         for (Number iterator : values) {
             if (iterator != null)
-                this.valueDoubleList.add(Math.abs(Double.valueOf(String.valueOf(iterator))));
+                this.valueFloatList.add(Math.abs(Float.valueOf(String.valueOf(iterator))));
         }
         invalidate();
         return this;
@@ -144,13 +143,13 @@ public class ProportionsBar extends View {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        ArrayList<Float> tempDouble = new ArrayList<>();
+        ArrayList<Float> tempFloat = new ArrayList<>();
         //instantiate proportion list
-        if (valueDoubleList != null) tempDouble = getProportionValues(valueDoubleList);
+        if (valueFloatList != null) tempFloat = getProportionValues(valueFloatList);
         //fill proportion list used for segment drawing in onDraw()
-        if (valueDoubleList != null) {
-            for (int i = 0; i < valueDoubleList.size(); i++)
-                proportionValueList.add(tempDouble.get(i));
+        if (valueFloatList != null) {
+            for (int i = 0; i < valueFloatList.size(); i++)
+                proportionValueList.add(tempFloat.get(i));
         }
         //check for the first view launch animation
         if (animated && firstLaunch) playAnimation();
@@ -174,7 +173,7 @@ public class ProportionsBar extends View {
         if (!showRoundedCorners) {
             wSmall = wBig;
         } else {
-            wSmall = (float) (getWidth() - 2 * r - gapSize * (valueDoubleList.size() - 1));
+            wSmall = (float) (getWidth() - 2 * r - gapSize * (valueFloatList.size() - 1));
         }
         //size of gaps (depends from container view width and denominator)
         float gapSize = (float) (wBig * this.gapSize / 100);
@@ -241,28 +240,28 @@ public class ProportionsBar extends View {
     }
 
     //transform array of values into array of proportions ( % values )
-    private ArrayList<Float> getProportionValues(ArrayList<Double> val) {
+    private ArrayList<Float> getProportionValues(ArrayList<Float> val) {
         double sum = 0;
-        ArrayList<Float> percentValues = new ArrayList<>();
+        ArrayList<Float> proportionValues = new ArrayList<>();
         //get sum of all arguments
         for (double iterator : val) sum += iterator;
         //divide each element by sum to get % values
         for (int v = 0; v < val.size(); v++) {
             //check for minimalSegmentValue
             if ((val.get(v) * 100 / sum) > 0 && (val.get(v) * 100 / sum) < minimalSegmentValue) {
-                percentValues.add((float) minimalSegmentValue);
+                proportionValues.add((float) minimalSegmentValue);
             } else {
-                percentValues.add((float) (val.get(v) * 100 / sum));
+                proportionValues.add((float) (val.get(v) * 100 / sum));
             }
         }
-        return percentValues;
+        return proportionValues;
     }
 
     private void initColorQueue() {
         colorQueue.clear();
         if (intColors != null) colorQueue.addAll(intColors);
         if (stringColors != null) colorQueue.addAll(transformStringColorToInt(stringColors));
-        //add default color if colorQueue is empty
+        //use default colors if colorQueue is empty
         if (colorQueue == null) {
             colorQueue.addAll(transformStringColorToInt(defaultColors));
         }
@@ -282,7 +281,7 @@ public class ProportionsBar extends View {
         return temp;
     }
 
-    //currently only for proportionValueList.size() = 3
+    //currently only viable for proportionValueList.size() = 3
     public void playAnimation() {
         //setup animations for proportionsBar4
         AnimatorSet animSet = new AnimatorSet();
