@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         proportionsBar1.showGaps(true)
                 .gapSize(0.8)
                 .heightOfBar(80)
+                .animated(true)
+                .animationDuration(2000 * 5)
                 .showRoundedCorners(true)
                 .radiusRoundedCorners(3.5)
                 .minimalSegmentValue(1)
@@ -42,10 +44,12 @@ public class MainActivity extends AppCompatActivity {
         proportionsBar2.setId(R.id.proportions_bar_2);
         proportionsBar2.showRoundedCorners(false)
                 .showGaps(false)
+                .animated(true)
+                .animationDuration(2000 * 5)
                 .addColors(getResources().getColor(R.color.example2_1),
                         getResources().getColor(R.color.example2_2),
                         getResources().getColor(R.color.example2_3))
-                .addValues(11.801, -30.05, 24.79, 12.001, 41.238, 27.11);
+                .addValues(11.801, -30.05, 24.79, 12.001, 41.238, -30.05, 24.79, 12.001, 41.238, 27.11);
 
         LinearLayout container2 = findViewById(R.id.container_pb2);
         container2.addView(proportionsBar2);
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         proportionsBar4.showGaps(true)
                 .gapSize(0.7)
                 .animated(true)
-                .animationDuration(2000)
+                .animationDuration(2000 * 3)
                 .gapColor(Color.BLACK)
                 .showRoundedCorners(false)
                 .addColors(getResources().getColor(R.color.example4_1),
@@ -98,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         proportionsBar5.showGaps(true)
                 .gapSize(0.7)
                 .animated(true)
-                .animationDuration(2000)
+                .animationDuration(2000 * 5)
                 .gapColor(Color.BLACK)
                 .showRoundedCorners(false)
                 .addColors(getResources().getColor(R.color.example4_1),
