@@ -33,8 +33,6 @@ public class ProportionsBar extends View {
     private int minimalSegmentValue = 2;
     //list of data values
     private ArrayList<Float> valueFloatList = new ArrayList<>();
-    //    private ArrayList<Double> valueFloatList = new ArrayList<>();
-//    private ArrayList<Float> valueFloatList = new ArrayList<>();
     //height of custom view in % of parent view
     private double scaleH = 100;
 
@@ -42,7 +40,7 @@ public class ProportionsBar extends View {
     //play animation
     private boolean animated = false;
     //animation duration
-    private int animationDuration = 1000;
+    private int baseAnimationDuration = 1000;
 
     //proportion values list
     public List<Float> proportionValueList = new ArrayList<>();
@@ -100,14 +98,14 @@ public class ProportionsBar extends View {
     }
 
     public ProportionsBar animationDuration(int duration) {
-        this.animationDuration = duration;
+        this.baseAnimationDuration = duration;
         return this;
     }
 
     public ProportionsBar addValues(Number... values) {
         for (Number iterator : values) {
             if (iterator != null)
-                this.valueFloatList.add(Math.abs(Float.valueOf(String.valueOf(iterator))));
+                this.valueFloatList.add(Math.abs(Float.parseFloat(String.valueOf(iterator))));
         }
         invalidate();
         return this;
@@ -264,7 +262,7 @@ public class ProportionsBar extends View {
         if (intColors != null) colorQueue.addAll(intColors);
         if (stringColors != null) colorQueue.addAll(transformStringColorToInt(stringColors));
         //use default colors if colorQueue is empty
-        if (colorQueue == null) {
+        if (colorQueue.isEmpty()) {
             colorQueue.addAll(transformStringColorToInt(defaultColors));
         }
     }
@@ -289,10 +287,10 @@ public class ProportionsBar extends View {
         AnimatorSet animSet = new AnimatorSet();
         ObjectAnimator animIntList1 = ObjectAnimator
                 .ofFloat(this, "FirstSegment", 0, this.proportionValueList.get(0));
-        animIntList1.setDuration(animationDuration);
+        animIntList1.setDuration(baseAnimationDuration);
         ObjectAnimator animIntList2 = ObjectAnimator
                 .ofFloat(this, "SecondSegment", this.proportionValueList.get(0), this.proportionValueList.get(1));
-        animIntList2.setDuration(animationDuration);
+        animIntList2.setDuration(baseAnimationDuration);
         animSet.playTogether(animIntList1, animIntList2);
         animSet.start();
     }
